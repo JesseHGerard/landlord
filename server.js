@@ -18,6 +18,7 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 require('./controllers/api-controller')(app);
+require('./controllers/sms-controller')(app);
 
 db.sequelize.sync().then(function() {
   app.listen(PORT, function() {
