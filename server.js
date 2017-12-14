@@ -25,6 +25,7 @@ const runServer = () => {
 
 	require('./controllers/api-controller')(app);
 	require('./controllers/sms-controller')(app);
+	require('./controllers/handlebars-controller')(app);
 
 	db.sequelize.sync().then(function() {
 		app.listen(PORT, function() {
