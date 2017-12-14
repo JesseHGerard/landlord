@@ -9,8 +9,9 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		address: {
 			type: DataTypes.STRING,
+			allowNull: false,
 			validate: {
-				len: [1]
+				len: [1],
 			},
 		},
 	});

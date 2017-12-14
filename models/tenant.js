@@ -49,6 +49,24 @@ module.exports = function(sequelize, DataTypes) {
 		});
 		Tenant.hasMany(models.Issue);
 	};
+	
+	Tenant.prototype.validPassword = function(password) {
+		return bcrypt.compareSync(password, this.password);
+	};
+	
+	Tenant.hook("beforeCreate", function(instance) {
+		if (instance.password) instance.password = bcrypt.hashSync(instance.password, bcrypt.genSaltSync(10), null);
+	});
+	
+	Tenant.hook("beforeBulkUpdate", function(instances) {
+		instances.individualHooks = true;
+	});
+	
+	Tenant.hook("beforeUpdate", function(instance, options) {
+		if (options.fields.includes("password")) {
+			instance.password = bcrypt.hashSync(instance.password, bcrypt.genSaltSync(10), null);
+		}
+	});
 
 	return Tenant;
 };
