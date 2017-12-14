@@ -10,6 +10,7 @@ module.exports = function(sequelize, DataTypes) {
 		address: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			unique: true,
 			validate: {
 				len: [1],
 			},
