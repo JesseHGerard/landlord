@@ -19,9 +19,25 @@ module.exports = function(app) {
 		};
 		
 		if (req.body.userType === 'tenant') {
-			db.Tenant.create(req.body).then(promise).catch(errorHandler); // To-do: Handle combinations with existing tenants
+			if (req.body.phone) {
+				db.Tennant.findAll({where: {phone: req.body.phone}}).then(data => {
+					if (data.length > 0) {
+						db.Tenant.update({
+							email: req.body.email,
+							password: req.body.password,
+							name: req.body.name,
+							apt: req.body.apt,
+							BuildingId: req.body.BuildingId,
+						}, {where: {phone: req.body.phone}}).then(promise).catch(errorHandler);
+					} else {
+						db.Tenant.create(req.body).then(promise).catch(errorHandler);
+					}
+				}).catch(errorHandler);
+			} else {
+				db.Tenant.create(req.body).then(promise).catch(errorHandler);
+			}
 		} else if (req.body.userType === 'landlord') {
-			db.Landlord.create(req.body).then(promise).catch(errorHandler); // To-do: Handle combinations with existing tenants
+			db.Landlord.create(req.body).then(promise).catch(errorHandler);
 		}
 	});
 	
