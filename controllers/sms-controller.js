@@ -1,6 +1,6 @@
 
-
-var db = require("../models");
+const issues = require('../config/issues.js');
+const db = require("../models");
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 
@@ -93,7 +93,15 @@ module.exports = function(app) {
 					res.writeHead(200, {'Content-Type': 'text/xml'});
 					res.end(twiml.toString());
 				};
-			};
+			}
+			// if user is in database and is not in newUserSetUp
+			else if (data !== null && newUserSetUp[userFrom] === undefined) {
+				let messageArray = req.body.Body.trim().split(' '), qty, issue, catagory;
+
+				for (item of messageArray) {
+					
+				}
+			}
 		});
 
 	});
