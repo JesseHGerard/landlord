@@ -1,3 +1,5 @@
+var bcrypt = require("bcrypt-nodejs");
+
 module.exports = function(sequelize, DataTypes) {
 	var Landlord = sequelize.define("Landlord", {
 		phone: {
