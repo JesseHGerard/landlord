@@ -3,6 +3,7 @@ module.exports = function(sequelize, DataTypes) {
 		phone: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			unique: true,
 			validate: {
 				isMobilePhone: 'any' // I think this is how it works?
 			},
@@ -10,6 +11,7 @@ module.exports = function(sequelize, DataTypes) {
 		email: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			unique: true,
 			validate: {
 				isEmail: true
 			},
