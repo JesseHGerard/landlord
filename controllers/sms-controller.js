@@ -1,4 +1,5 @@
 
+
 var db = require("../models");
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
@@ -6,7 +7,7 @@ const MessagingResponse = require('twilio').twiml.MessagingResponse;
 // require the Twilio module and create a REST client
 const client = require('twilio')(process.env.twilioSid, process.env.twiloAuthToken);
 
-const replySms = (res) => {
+const replySms = (res, message) => {
 	const twiml = new MessagingResponse();
 
 	twiml.message('The Robots are coming! Head for the hills!');
@@ -19,25 +20,81 @@ const replySms = (res) => {
 const newUserSetUp = {};
 
 module.exports = function(app) {
+
+	// receive sms from twilio webhook
 	app.post('/sms', (req, res) => {
-		console.log('newUserSetUp:', newUserSetUp);
+		const userFrom = req.body.From;
 
 		// search db for sms sender phone number
 		db.Tenant.findOne({
-			where: {phone: req.body.From}
+			where: {phone: userFrom}
 		})
 		.then(data => {
 			// if phone number is not in database
-			if (data === null && newUserSetUp[req.body.From] === undefined) {
-				// create new tenant
-				db.Tenant.create({
-					phone: req.body.From,
-				});
-				// add user to newUserSetUp
-				newUserSetUp[req.body.From] = {phone: req.body.From};
-			} else if (data.phone === newUserSetUp[data.phone]){
+			if (data === null && newUserSetUp[userFrom] === undefined) {
+				// get building data (address) from To phone number
+				db.Building.findOne({phone: req.body.To}).then(building => {
+					// create new tenant
+					db.Tenant.create({
+						phone: userFrom,
+						BuildingId: building.id
+					}).then(result => {
+						// add user to newUserSetUp, and ask name
+						newUserSetUp[userFrom] = {phone: userFrom, nameStatus: false};
+						console.log(`Phone Number added to Database: newUserSetUp: ${newUserSetUp}`);
+						const twiml = new MessagingResponse();
+						twiml.message('Thanks for submitting your issue. Please answer 2 quick questions to set up an account:');
+						twiml.message('1. What is your first name?');
+						res.writeHead(200, {'Content-Type': 'text/xml'});
+						res.end(twiml.toString());
+					});
+				})
 
 			}
+			// user is in newUserSetUp
+			else if (data !== null && newUserSetUp[userFrom] !== undefined) {
+				console.log(`User is in newUserSetup\nnewUserSetup: ${newUserSetUp}`)
+				// name is not defined yet
+				if (newUserSetUp[userFrom].nameStatus === false) {
+					newUserSetUp[userFrom].name = req.body.Body;
+					// add name to database
+					db.Tenant.update(
+						{name: req.body.Body},
+						{where: {phone: data.phone}}
+					).then(result => {
+						newUserSetUp[userFrom].nameStatus = true;
+						newUserSetUp[userFrom].aptStatus = false;
+						// send appartment number request
+						const twiml = new MessagingResponse();
+						twiml.message(`Thanks ${req.body.Body} \n2. Which apartment are you in?`);
+						res.writeHead(200, {'Content-Type': 'text/xml'});
+						res.end(twiml.toString());
+					});
+				}
+				// appartment is not defined
+				else if (newUserSetUp[userFrom].aptStatus === false) {
+					newUserSetUp[userFrom].apt = req.body.Body;
+					// add apt to database
+					db.Tenant.update(
+						{apt: req.body.Body},
+						{where: {phone: data.phone}}
+					).then(result => {
+						delete newUserSetUp[userFrom];
+						// send setup success sms
+						const twiml = new MessagingResponse();
+						twiml.message(`Setup complete! You can now text all your building issues to this number. To make changes to your account, please visit ${process.env.siteUrl}`);
+						res.writeHead(200, {'Content-Type': 'text/xml'});
+						res.end(twiml.toString());
+					});
+				} else {
+					// error message
+					const twiml = new MessagingResponse();
+					twiml.message(`There was an error setting up your account. Please go to ${process.env.siteUrl} to finish setup.`);
+					res.writeHead(200, {'Content-Type': 'text/xml'});
+					res.end(twiml.toString());
+				};
+			};
 		});
+
 	});
 };
