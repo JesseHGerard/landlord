@@ -23,5 +23,24 @@ $(document).ready(function() {
       });
     });
 
+    $("#newSign").on("click", function(event) {
+      event.preventDefault();
+
+      // Creates a newUser object
+      var newUser = {
+        name: $("#name").val().trim(),
+        email: $("#email").val().trim(),
+        password: $("#password").val().trim(),
+        building: $("#building").val().trim(),
+        apartment: $("#apartment").val().trim(),
+        number : $("#number").val().trim()
+      };
+
+      // Send an AJAX POST-request
+      $.post("/api/new", newUser).done(function(data) {
+        console.log(data);
+      })
+    })
+
 
 });

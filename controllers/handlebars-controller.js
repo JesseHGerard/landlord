@@ -32,5 +32,18 @@ module.exports = function(app) {
     res.render("signup");
   })
 
+	app.post("/api/new", function(req, res) {
+		console.log("Book Data:");
+		console.log(req.body);
+		db.Tenant.create({
+			phone: req.body.number,
+			email: req.body.email,
+			name: req.body.name,
+			apt: req.body.apartment,
+			password: req.body.password
+		});
+		res.send("Signup has been successful");
+	});
+
 
 };
