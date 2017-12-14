@@ -1,29 +1,43 @@
+
+var db = require("../models");
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
-// Twilio Credentials
-const accountSid = 'ACa004ded62206b79ef632da124706a510';
-const authToken = '35f64f640dff678992cee3cdf24f9d16';
 
 // require the Twilio module and create a REST client
-const client = require('twilio')(accountSid, authToken);
+const client = require('twilio')(process.env.twilioSid, process.env.twiloAuthToken);
 
-function sendMessage() {
-	client.messages.create({
-		to: '+15712512095',
-		from: '+12025169967',
-		body: 'They call it a Royale with Cheese',
-	}).then(
-		(message) => console.log(message.sid)
-	);
-}
+const replySms = (res) => {
+	const twiml = new MessagingResponse();
+
+	twiml.message('The Robots are coming! Head for the hills!');
+
+	res.writeHead(200, {'Content-Type': 'text/xml'});
+	res.end(twiml.toString());
+};
+
+// store user info in progres of being setup
+const newUserSetUp = {};
 
 module.exports = function(app) {
 	app.post('/sms', (req, res) => {
-		const twiml = new MessagingResponse();
+		console.log('newUserSetUp:', newUserSetUp);
 
-		twiml.message('The Robots are coming! Head for the hills!');
+		// search db for sms sender phone number
+		db.Tenant.findOne({
+			where: {phone: req.body.From}
+		})
+		.then(data => {
+			// if phone number is not in database
+			if (data === null && newUserSetUp[req.body.From] === undefined) {
+				// create new tenant
+				db.Tenant.create({
+					phone: req.body.From,
+				});
+				// add user to newUserSetUp
+				newUserSetUp[req.body.From] = {phone: req.body.From};
+			} else if (data.phone === newUserSetUp[data.phone]){
 
-		res.writeHead(200, {'Content-Type': 'text/xml'});
-		res.end(twiml.toString());
+			}
+		});
 	});
 };
