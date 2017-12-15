@@ -11,15 +11,8 @@ module.exports = function(app) {
 
   // Congratulations you have updated!
   app.get("/account-update/:created", function(req, res) {
-      res.render("account-update", {created: req.params.created});
-	  console.log(req.params.created);
+      res.render("account-update", {created: (req.params.created === 'true')});
   });
-
-  /*app.get("/api/congratulations/", function(req, res) {
-    // false updates new account
-      res.render("congratulations2");
-  });*/
-
 
   // Number Creation
   app.get("/api/number/:id", function(req, res) {

@@ -65,7 +65,7 @@ $(document).ready(function() {
         if (data) {
           alert("Created a new account!");
         } else {
-          alert("Updated a new account!");
+          alert("Updated an account!");
         }
 		window.location.assign("/account-update/" + data);
       });
