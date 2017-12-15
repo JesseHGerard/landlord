@@ -108,6 +108,10 @@ module.exports = function(app) {
 		});
 	});
 	
+	app.get("/api/is-logged-in", (req, res) => {
+		res.json(((req.user) ? true : false));
+	});
+	
 	/* boilerplate routing shell
 	app.<fn>("<route>", (req, res) => {
 		
