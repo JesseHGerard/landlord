@@ -18,8 +18,21 @@ $(document).ready(function() {
       //event.preventDefault();
       var id = $("#numberInput").val().trim();
 
+      // $.get("/api/number/"+id);
+
       $.get("/api/number/"+id).done(function(data) {
-        window.location.replace("/api/number/");
+        console.log(data);
+
+        if (data.condition === true) {
+          alert("Please enter a valid number, you entered " + data.buildingNumber);
+
+          // window.location.assign("/api/number/");
+        }
+        else {
+          window.location.assign("/api/signup/"+data.buildingNumber);
+        }
+
+        // window.location.assign("/api/number/");
       });
     });
 
@@ -28,18 +41,24 @@ $(document).ready(function() {
 
       // Creates a newUser object
       var newUser = {
-        name: $("#name").val().trim(),
+        phone: $("#phone").val().trim(),
         email: $("#email").val().trim(),
-        password: $("#password").val().trim(),
-        building: $("#building").val().trim(),
-        apartment: $("#apartment").val().trim(),
-        number : $("#number").val().trim()
+        name: $("#name").val().trim(),
+        apt: $("#apt").val().trim(),
+        password : $("#password").val().trim(),
+        BuildingId: $("#title").data("id")
       };
 
-      // Send an AJAX POST-request
-      $.post("/api/new", newUser).done(function(data) {
-        console.log(data);
-      })
+      if (newUser.phone === "" || newUser.email === "" || newUser.name === "" || newUser.apt === "" || newUser.apt === "" ) {
+        alert("Please fill in all of the fields")
+      }
+      else {
+              // Send an AJAX POST-request
+        $.post("/api/new", newUser).done(function(data) {
+          alert(data);
+        })
+      }
+
     })
 
 
