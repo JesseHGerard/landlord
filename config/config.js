@@ -3,10 +3,10 @@ console.log('read config');
 
 module.exports = {
 	"development": {
-		"username": 'qdere8omc5g2wmqa',
-		"password": 'b2g5o89i3q5ov4w7',
+		"username": process.env.jaws_username,
+		"password": process.env.jaws_password,
 		"database": 'hpymvb5de1i66bl4',
-		"host": 'tk3mehkfmmrhjg0b.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+		"host": process.env.jaws_host,
 		"port": 3306,
 		"dialect": "mysql"
 	},
