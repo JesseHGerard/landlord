@@ -9,6 +9,12 @@ module.exports = function(app) {
     res.render("index");
   });
 
+
+  app.get("/yesno:id", function(req, res) {
+    console.log(req.params.id);
+    res.render("yesno");
+  });
+
   // Congratulations you have updated!
   app.get("/api/congratulations/true", function(req, res) {
     // true creates new account
