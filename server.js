@@ -12,7 +12,6 @@ var checkEnv = require('./config/env.js');
 
 const runServer = () => {
 	var app = express();
-	var PORT = process.env.PORT;
 
 	app.use(express.static("public"));
 	app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,8 +28,8 @@ const runServer = () => {
 
 	db.sequelize.sync({logging: false}).then((results) => {
 		console.log("Synced database models:" + results.modelManager.models.map((val) => {return "\n  " + val.name;}).join("") + "\n");
-		app.listen(PORT, () => {
-			console.log("Server listening on port " + PORT);
+		app.listen(process.env.PORT, () => {
+			console.log("Server listening on port " + process.env.PORT);
 		});
 	});
 };
