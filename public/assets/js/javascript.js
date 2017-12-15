@@ -2,6 +2,12 @@ $(document).ready(function() {
 
   // Opening functions - yes or no
 
+  $("#searchAddress").on("click", function(event) {
+    $.get("/api/search/").done(function(data) {
+      window.location.replace("/api/search");
+    });
+  });
+
   $("#yes").on("click", function(event) {
     $.get("/api/search/").done(function(data) {
       window.location.replace("/api/search/");
