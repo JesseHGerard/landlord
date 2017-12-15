@@ -1,16 +1,19 @@
+var checkEnv = require('./config/env.js');
 var express = require('express');
 var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 //var passport = require('./config/passport');
-var db = require('./models');
-var checkEnv = require('./config/env.js');
+
+
 
 // define variables that should remain secret in heroku as envrionmental variables
 // for local testing, also place in keys.js AND define as process.env in env.js
 
 
 const runServer = () => {
+	var db = require('./models');
+	
 	var app = express();
 	var PORT = process.env.PORT;
 

@@ -24,6 +24,9 @@ const checkEnv = () => {
 				process.env.twilioPhoneNumber = keys.twilioPhoneNumber;
 				process.env.twilioSid = keys.twilioSid;
 				process.env.twiloAuthToken = keys.twiloAuthToken;
+				process.env.jaws_host = keys.jaws_host;
+				process.env.jaws_username = keys.jaws_username;
+				process.env.jaws_password = keys.jaws_password;
 
 				resolve('local');
 			});
