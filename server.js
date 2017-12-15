@@ -17,7 +17,7 @@ const runServer = () => {
 	app.use(express.static("public"));
 	app.use(bodyParser.urlencoded({ extended: false }));
 	app.use(bodyParser.json());
-	app.use(session({ secret: "r0ach m0t31", resave: true, saveUninitialized: true }));
+	//app.use(session({ secret: "r0ach m0t31", resave: true, saveUninitialized: true }));
 	app.use(passport.initialize());
 	app.use(passport.session());
 	app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -25,8 +25,7 @@ const runServer = () => {
 
 	require('./controllers/api-controller')(app);
 	require('./controllers/sms-controller')(app);
-	//require('./controllers/handlebars-controller')(app);
-	require('./controllers/web-controller')(app);
+	require('./controllers/handlebars-controller')(app);
 
 	db.sequelize.sync({logging: false}).then((results) => {
 		console.log("Synced database models:" + results.modelManager.models.map((val) => {return "\n  " + val.name;}).join("") + "\n");
