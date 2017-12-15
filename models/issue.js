@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
 
 	Issue.associate = function(models) {
 		Issue.belongsTo(models.Tenant);
-		Issue.belongsTo(models.Building);
+		Issue.belongsTo(models.Building, {onDelete: "cascade"});
 	};
 
 	return Issue;
