@@ -13,7 +13,7 @@ var session = require('express-session');
 
 const runServer = () => {
 	var db = require('./models');
-	
+
 	var app = express();
 	var PORT = process.env.PORT;
 
@@ -30,8 +30,9 @@ const runServer = () => {
 	require('./controllers/sms-controller')(app);
 	require('./controllers/handlebars-controller')(app);
 
+	console.log(run sync);
 	db.sequelize.sync({logging: false}).then((results) => {
-		console.log("Synced database models:" + results.modelManager.models.map((val) => {return "\n  " + val.name;}).join("") + "\n");
+		console.log("Synced database models:" + results.modelManager.models.map((val) => {return "\n  " + val.name;}).join("") + "\n").catch(error => console.log(error));
 		app.listen(PORT, () => {
 			console.log("Server listening on port " + PORT);
 		});
