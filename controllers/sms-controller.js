@@ -117,8 +117,8 @@ module.exports = function(app) {
 					description: issue,
 					quantity: qty,
 					TenantId: data.id,
-					BuildingId: building.id,
-				}).then(response => {}).catch(err => {});
+					BuildingId: data.BuildingId
+				});
 			};
 
 		});
