@@ -113,12 +113,12 @@ module.exports = function(app) {
 					issue = req.body.Body;
 					category = 'message';
 				};
-				// db.Issue.create({
-				// 	description: issue;
-				// 	quantity: qty;
-				// 	TenantId: data.id;
-				// 	BuildingId: building.id;
-				// });
+				db.Issue.create({
+					description: issue,
+					quantity: qty,
+					TenantId: data.id,
+					BuildingId: data.BuildingId
+				});
 			};
 
 		});
