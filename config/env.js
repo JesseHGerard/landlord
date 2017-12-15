@@ -1,4 +1,5 @@
 const checkEnv = () => {
+
 	const requireKeys = () => {
 		return new Promise((resolve, reject) => {
 			const keys = require('./keys.js');
@@ -11,7 +12,7 @@ const checkEnv = () => {
 		// define keys that need to be added regardless of environment here
 		process.env.siteUrl = 'https://serfbord.herokuapp.com';
 
-		if (process.env.heroku) {
+		if (process.env.heroku){
 			console.log("env is heroku, using available process.env's")
 			resolve('heroku');
 		} else {
@@ -19,14 +20,14 @@ const checkEnv = () => {
 			requireKeys().then( keys => {
 
 				// define process.env's here, must be same as heroku env's.
-				// process.env.PORT = 3000;
+				process.env.PORT = 3000;
 				process.env.twilioPhoneNumber = keys.twilioPhoneNumber;
 				process.env.twilioSid = keys.twilioSid;
 				process.env.twiloAuthToken = keys.twiloAuthToken;
 
 				resolve('local');
 			});
-		};
+		}
 	});
 };
 
