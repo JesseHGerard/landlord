@@ -69,8 +69,12 @@ module.exports = function(app) {
 		res.render("signup", { title: title, condition: true});
   })
 
-	// Need to do validation on query for the number so no duplicates!!
+	app.get("/api/building/", function(req,res) {
+		res.render("building");
+	})
 
+	// Need to do validation on query for the number so no duplicates!!
+	// Creates new Tenant
 	app.post("/api/new", function(req, res) {
 
 		db.Tenant.findOne({
@@ -96,10 +100,20 @@ module.exports = function(app) {
 				res.send("Sorry, but this number has already been registered");
 			}
 		});
+	});
 
 
-
-
+	// Creates new building
+	app.post("/api/newBuilding", function(req, res) {
+		console.log("hello");
+		// db.Building.findOne({
+		// 	where: {
+		// 		phone: req.body.address
+		// 	}
+		// }).then(data => {
+		// 	if (data===null) {
+		// 	}
+		// });
 	});
 
 

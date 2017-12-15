@@ -9,8 +9,8 @@ $(document).ready(function() {
     });
 
     $("#no").on("click", function(event) {
-      $.get("/api/signup/").done(function(data) {
-        window.location.replace("/api/signup/");
+      $.get("/api/building/").done(function(data) {
+        window.location.replace("/api/building/");
       });
     });
 
@@ -50,16 +50,36 @@ $(document).ready(function() {
       };
 
       if (newUser.phone === "" || newUser.email === "" || newUser.name === "" || newUser.apt === "" || newUser.apt === "" ) {
-        alert("Please fill in all of the fields")
+        alert("Please fill in all of the fields");
       }
       else {
               // Send an AJAX POST-request
         $.post("/api/new", newUser).done(function(data) {
           alert(data);
-        })
+        });
       }
 
-    })
+    });
+
+
+    $("#newBuilding").on("click", function(event) {
+      event.preventDefault();
+
+      var newBuilding = {
+        address: $("#address").val().trim(),
+        phone: $("#phone").val().trim()
+      };
+
+      if (newBuilding.address === "" || newBuilding.phone === "") {
+        alert("Please fill in all the fields");
+      }
+      else {
+        console.log("hello");
+        $.post("/api/newBuilding", newBuilding).done(function(data) {
+          alert(data);
+        });
+      }
+    });
 
 
 });
