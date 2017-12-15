@@ -96,13 +96,31 @@ module.exports = function(app) {
 			}
 			// if user is in database and is not in newUserSetUp
 			else if (data !== null && newUserSetUp[userFrom] === undefined) {
-				let messageArray = req.body.Body.trim().split(' '), qty, issue, catagory;
-
+				// process issue
+				let messageArray = req.body.Body.trim().split(' '), qty, issue, category;
 				for (item of messageArray) {
-					
-				}
-			}
-		});
+					let search = issues.search('item');
+					if (search) {
+						issue = search.issue;
+						category = search.category;
+					} else if (parseInt(item)) {
+						qty = parseInt(item);
+					};
+				};
+				// add issue to db
+				if (!qty) qty = 1;
+				if (!issue) {
+					issue = req.body.Body;
+					category = 'message';
+				};
+				// db.Issue.create({
+				// 	description: issue;
+				// 	quantity: qty;
+				// 	TenantId: data.id;
+				// 	BuildingId: building.id;
+				// });
+			};
 
+		});
 	});
 };
