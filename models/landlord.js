@@ -2,6 +2,12 @@ var bcrypt = require("bcrypt-nodejs");
 
 module.exports = function(sequelize, DataTypes) {
 	var Landlord = sequelize.define("Landlord", {
+		uuid: {
+			type: DataTypes.UUID,
+			allowNull: false,
+			primaryKey: true,
+			defaultValue: DataTypes.UUIDV4,
+		},
 		phone: {
 			type: DataTypes.STRING,
 			allowNull: true,
@@ -30,6 +36,11 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		lastLogin: {
 			type: DataTypes.DATE,
+		},
+		userType: {
+			type: DataTypes.ENUM('landlord'),
+			default: 'landlord',
+			allowNull: false,
 		},
 	}, {
 		validate: {

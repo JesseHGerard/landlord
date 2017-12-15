@@ -18,15 +18,9 @@ module.exports = function(sequelize, DataTypes) {
 	});
 
 	Building.associate = function(models) {
-		Building.hasMany(models.Tenant, {
-			onDelete: "cascade"
-		});
-		Building.hasOne(models.Landlord, {
-			onDelete: "cascade"
-		});
-		Building.hasMany(models.Issue, {
-			onDelete: "cascade"
-		});
+		Building.hasOne(models.Landlord);
+		Building.hasMany(models.Tenant);
+		Building.hasMany(models.Issue);
 	};
 
 	return Building;

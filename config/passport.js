@@ -36,12 +36,12 @@ passport.use(new LocalStrategy({
 	}
 }));
 
-passport.serializeUser((user, cb) => {
-	cb(null, user);
+passport.serializeUser((user, done) => {
+	done(null, user);
 });
 
-passport.deserializeUser((obj, cb) => {
-	cb(null, obj);
+passport.deserializeUser((key, done) => {
+	done(null, key);
 });
 
 module.exports = passport;

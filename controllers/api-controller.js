@@ -3,7 +3,7 @@ var passport = require("../config/passport");
 
 module.exports = function(app) {
 	
-	app.post("/api/login", passport.authenticate("local"), (req, res) => {
+	app.post("/api/login", passport.authenticate("local", {failureFlash: true}), (req, res) => {
 		res.json("/dashboard"); // To-do: change this to reflect actual urls
 	});
 	
