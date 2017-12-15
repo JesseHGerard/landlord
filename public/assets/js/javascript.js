@@ -55,12 +55,10 @@ $(document).ready(function() {
       $.post("/api/new", newUser).done(function(data) {
         if (data) {
           alert("Created a new account!");
-          window.location.assign("/api/congratulations/" + data);
-          }
-        else {
+        } else {
           alert("Updated a new account!");
-          window.location.assign("/api/congratulations/" + data);
         }
+		window.location.assign("/account-update/" + data);
       });
     }
   });
