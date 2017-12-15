@@ -9,6 +9,7 @@ var checkEnv = require('./config/env.js');
 // define variables that should remain secret in heroku as envrionmental variables
 // for local testing, also place in keys.js AND define as process.env in env.js
 
+console.log(process.env.PORT)
 
 const runServer = () => {
 	var app = express();
