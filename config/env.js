@@ -19,7 +19,7 @@ const checkEnv = () => {
 			requireKeys().then( keys => {
 
 				// define process.env's here, must be same as heroku env's.
-				process.env.PORT = 3000;
+				// process.env.PORT = 3000;
 				process.env.twilioPhoneNumber = keys.twilioPhoneNumber;
 				process.env.twilioSid = keys.twilioSid;
 				process.env.twiloAuthToken = keys.twiloAuthToken;
