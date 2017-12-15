@@ -13,14 +13,14 @@ const issues = {
   },
   search(word) {
     let result;
-    for (catagory in this) {
-      console.log(`catagory: ${catagory}`);
-      for (issue in this[catagory]) {
+    for (category in this) {
+      console.log(`category: ${category}`);
+      for (issue in this[category]) {
         console.log(` issue: ${issue}`);
-        for (keyword of this[catagory][issue]) {
+        for (keyword of this[category][issue]) {
           console.log(`   keyword: ${keyword}`);
           if (word === keyword) {
-            result = [issue, catagory];
+            result = {'issue': issue, 'category': issue};
           };
         };
       };
@@ -28,5 +28,6 @@ const issues = {
     return result;
   }
 };
+
 
 module.exports = issues;
