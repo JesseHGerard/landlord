@@ -21,6 +21,29 @@ const newUserSetUp = {};
 
 module.exports = function(app) {
 
+	app.get('/newBuildingPhone/:state/:city', (req, res) => {
+		console.log(req.params.city);
+		db.AreaCode.findOne({
+			where: {city: req.params.city, state: req.params.state}
+		}).then(areaData => {
+			client.availablePhoneNumbers('US').local
+			  .list({
+			    areaCode: areaData.code.toString(),
+			  })
+			  .then((data) => {
+			    const number = data[0];
+			    return client.incomingPhoneNumbers.create({
+			      phoneNumber: number.phoneNumber,
+			    });
+			  })
+			  .then((purchasedNumber) => console.log(purchasedNumber.sid))
+				.catch(err => console.log(err));
+
+			res.end();
+		});
+	});
+
+
 	// receive sms from twilio webhook
 	app.post('/sms', (req, res) => {
 		const userFrom = req.body.From;
@@ -116,8 +139,12 @@ module.exports = function(app) {
 				db.Issue.create({
 					description: issue,
 					quantity: qty,
+					category: category,
 					TenantId: data.id,
 					BuildingId: data.BuildingId
+				}).then(issueRes => {
+					// add qty response here
+
 				});
 			};
 
