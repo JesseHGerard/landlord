@@ -53,10 +53,16 @@ $(document).ready(function() {
     } else {
       // Send an AJAX POST-request
       $.post("/api/new", newUser).done(function(data) {
-        alert(data);
+        if (data) {
+          alert("Created a new account!");
+          window.location.assign("/api/congratulations/" + data);
+          }
+        else {
+          alert("Updated a new account!");
+          window.location.assign("/api/congratulations/" + data);
+        }
       });
     }
-
   });
 
 

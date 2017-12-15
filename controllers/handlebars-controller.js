@@ -9,6 +9,18 @@ module.exports = function(app) {
     res.render("index");
   });
 
+  // Congratulations you have updated!
+  app.get("/api/congratulations/true", function(req, res) {
+    // true creates new account
+      res.render("congratulations");
+  });
+
+  app.get("/api/congratulations/false", function(req, res) {
+    // false updates new account
+      res.render("congratulations2");
+  });
+
+
   // Number Creation
   app.get("/api/number/:id", function(req, res) {
 
@@ -102,9 +114,20 @@ module.exports = function(app) {
           password: req.body.password,
           BuildingId: req.body.BuildingId
         });
-        res.send("Signup has been successful");
+        res.send(true);
       } else {
-        res.send("Sorry, but this number has already been registered");
+        db.Tenant.update({
+          email: req.body.email,
+          name: req.body.name,
+          apt: req.body.apt,
+          password: req.body.password,
+          BuildingId: req.body.BuildingId
+        }, {
+          where: {
+            phone: req.body.phone
+          }
+        });
+        res.send(false);
       }
     });
   });
