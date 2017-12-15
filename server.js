@@ -2,7 +2,7 @@ var express = require('express');
 var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var passport = require('./config/passport');
+//var passport = require('./config/passport');
 var db = require('./models');
 var checkEnv = require('./config/env.js');
 
@@ -18,8 +18,8 @@ const runServer = () => {
 	app.use(bodyParser.urlencoded({ extended: false }));
 	app.use(bodyParser.json());
 	//app.use(session({ secret: "r0ach m0t31", resave: true, saveUninitialized: true }));
-	app.use(passport.initialize());
-	app.use(passport.session());
+	//app.use(passport.initialize());
+	//app.use(passport.session());
 	app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 	app.set("view engine", "handlebars");
 
