@@ -1,7 +1,7 @@
 module.exports = {
 	"development": {
 		"username": "root",
-		"password": "",
+		"password": "1234",
 		"database": "roach_motel",
 		"host": "localhost",
 		"port": 3306,

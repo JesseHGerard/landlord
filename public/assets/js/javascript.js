@@ -2,6 +2,15 @@ $(document).ready(function() {
 
   // Opening functions - yes or no
 
+  $("#searchAddress").on("click", function(event) {
+
+    var address = $("#addressLookUp").val().trim();
+
+    $.get("/yesno"+address).done(function(data) {
+      window.location.replace("/yesno"+address);
+    });
+  });
+
   $("#yes").on("click", function(event) {
     $.get("/api/search/").done(function(data) {
       window.location.replace("/api/search/");
