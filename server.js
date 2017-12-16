@@ -35,9 +35,8 @@ const runServer = () => {
 		});
 	});
 };
-runServer();
+//runServer();
 
-// checkEnv()
-// .then(resolve => {
-// 	runServer();
-// });
+checkEnv().then(resolve => {
+ 	runServer();
+});
