@@ -28,6 +28,7 @@ const checkEnv = () => {
 				process.env.jaws_username = keys.jaws_username;
 				process.env.jaws_password = keys.jaws_password;
 				process.env.jaws_database = keys.jaws_database;
+				process.env.JAWSDB_URL = keys.JAWSDB_URL;
 
 				resolve('local');
 			});

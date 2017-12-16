@@ -10,15 +10,15 @@ var db        = {};
 
 console.log(`Sequelize Inputs ${env} ${config.database}, ${config.username}, ${config.password}`);
 
-console.log(`Sequelize Inputs ${config.use_env_variable}, ${process.env[config.use_env_variable]}`);
+var sequelize = new Sequelize(process.env.JAWSDB_URL, config);
 
-if (config.use_env_variable) {
-	console.log(`if`);
-	var sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-	console.log(`else`);
-	var sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+// if (config.use_env_variable) {
+// 	console.log(`if`);
+// 	var sequelize = new Sequelize(process.env[config.use_env_variable], config);
+// } else {
+// 	console.log(`else`);
+// 	var sequelize = new Sequelize(config.database, config.username, config.password, config);
+// }
 
 
 
