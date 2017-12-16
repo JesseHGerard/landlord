@@ -1,18 +1,18 @@
-var express = require('express');
-var exphbs = require('express-handlebars');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var passport = require('./config/passport');
-var db = require('./models');
 var checkEnv = require('./config/env.js');
 
 // define variables that should remain secret in heroku as envrionmental variables
 // for local testing, also place in keys.js AND define as process.env in env.js
 
-
 const runServer = () => {
+	var express = require('express');
+	var exphbs = require('express-handlebars');
+	var bodyParser = require('body-parser');
+	var session = require('express-session');
+	var passport = require('./config/passport');
+	var db = require('./models');
+
 	var app = express();
-	var PORT = process.env.PORT || 3000;
+	var PORT = process.env.PORT;
 
 	app.use(express.static("public"));
 	app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,18 +25,19 @@ const runServer = () => {
 
 	require('./controllers/api-controller')(app);
 	require('./controllers/sms-controller')(app);
-	//require('./controllers/handlebars-controller')(app);
-	require('./controllers/web-controller')(app);
+	require('./controllers/handlebars-controller')(app);
 
+	console.log('run sync');
 	db.sequelize.sync({logging: false}).then((results) => {
 		console.log("Synced database models:" + results.modelManager.models.map((val) => {return "\n  " + val.name;}).join("") + "\n");
 		app.listen(PORT, () => {
 			console.log("Server listening on port " + PORT);
 		});
-	});
+	}).catch(error => console.log(error));
 };
 //runServer();
 
 checkEnv().then(resolve => {
  	runServer();
 });
+
