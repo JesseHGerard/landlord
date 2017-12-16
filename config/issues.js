@@ -21,7 +21,7 @@ const issues = {
       for (issue in this[category]) {
         for (keyword of this[category][issue]) {
           if (word === keyword) {
-            result = {'issue': issue, 'category': issue};
+            result = {'issue': issue, 'category': category};
           };
         };
       };
@@ -30,7 +30,7 @@ const issues = {
   },
   grammarize(issue, qty) {
     if (qty > 1) {
-      return 
+      return
     }
   }
 };

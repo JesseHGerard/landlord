@@ -124,8 +124,9 @@ module.exports = function(app) {
 			else if (data !== null && newUserSetUp[userFrom] === undefined) {
 				// process issue
 				let messageArray = req.body.Body.trim().split(' '), qty, issue, category;
+				console.log(messageArray);
 				for (item of messageArray) {
-					let search = issues.search('item');
+					let search = issues.search(item);
 					if (search) {
 						issue = search.issue;
 						category = search.category;
@@ -143,7 +144,7 @@ module.exports = function(app) {
 					description: issue,
 					quantity: qty,
 					category: category,
-					TenantId: data.id,
+					TenantUuid: data.Uuid,
 					BuildingId: data.BuildingId
 				}).then(issueRes => {
 					db.Issue.sum('quantity', {where: {description: issue}}).then(sum => {
