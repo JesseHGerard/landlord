@@ -119,6 +119,7 @@ module.exports = function(app) {
 				};
 			}
 			// if user is in database and is not in newUserSetUp
+			
 			// else if (data !== null && newUserSetUp[userFrom] === undefined) {
 			// 	// process issue
 			// 	let messageArray = req.body.Body.trim().split(' '), qty, issue, category;
