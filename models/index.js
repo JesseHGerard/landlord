@@ -1,4 +1,4 @@
-//'use strict';
+'use strict';
 
 var fs        = require('fs');
 var path      = require('path');
@@ -10,17 +10,7 @@ var db        = {};
 
 console.log(`Sequelize Inputs ${env} ${config.database}, ${config.username}, ${config.password}`);
 
-var sequelize = new Sequelize(process.env.JAWSDB_URL, config);
-
-// if (config.use_env_variable) {
-// 	console.log(`if`);
-// 	var sequelize = new Sequelize(process.env[config.use_env_variable], config);
-// } else {
-// 	console.log(`else`);
-// 	var sequelize = new Sequelize(config.database, config.username, config.password, config);
-// }
-
-
+var sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 
 fs
