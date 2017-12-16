@@ -61,7 +61,8 @@ module.exports = function(app) {
 					// create new tenant
 					db.Tenant.create({
 						phone: userFrom,
-						BuildingId: building.id
+						BuildingId: building.id,
+						userType: 'tenant'
 					}).then(result => {
 						// add user to newUserSetUp, and ask name
 						newUserSetUp[userFrom] = {phone: userFrom, nameStatus: false};
@@ -119,36 +120,41 @@ module.exports = function(app) {
 				};
 			}
 			// if user is in database and is not in newUserSetUp
-			
-			// else if (data !== null && newUserSetUp[userFrom] === undefined) {
-			// 	// process issue
-			// 	let messageArray = req.body.Body.trim().split(' '), qty, issue, category;
-			// 	for (item of messageArray) {
-			// 		let search = issues.search('item');
-			// 		if (search) {
-			// 			issue = search.issue;
-			// 			category = search.category;
-			// 		} else if (parseInt(item)) {
-			// 			qty = parseInt(item);
-			// 		};
-			// 	};
-			// 	// add issue to db
-			// 	if (!qty) qty = 1;
-			// 	if (!issue) {
-			// 		issue = req.body.Body;
-			// 		category = 'message';
-			// 	};
-			// 	db.Issue.create({
-			// 		description: issue,
-			// 		quantity: qty,
-			// 		category: category,
-			// 		TenantId: data.id,
-			// 		BuildingId: data.BuildingId
-			// 	}).then(issueRes => {
-			// 		// add qty response here
-      //
-			// 	});
-			// };
+
+			else if (data !== null && newUserSetUp[userFrom] === undefined) {
+				// process issue
+				let messageArray = req.body.Body.trim().split(' '), qty, issue, category;
+				for (item of messageArray) {
+					let search = issues.search('item');
+					if (search) {
+						issue = search.issue;
+						category = search.category;
+					} else if (parseInt(item)) {
+						qty = parseInt(item);
+					};
+				};
+				// add issue to db
+				if (!qty) qty = 1;
+				if (!issue) {
+					issue = req.body.Body;
+					category = 'message';
+				};
+				db.Issue.create({
+					description: issue,
+					quantity: qty,
+					category: category,
+					TenantId: data.id,
+					BuildingId: data.BuildingId
+				}).then(issueRes => {
+					db.Issue.sum('quantity', {where: {description: issue}}).then(sum => {
+						const twiml = new MessagingResponse();
+						twiml.message(`Thanks for submitting your issue. There have been ${sum} other ${issue} reported`);
+						res.writeHead(200, {'Content-Type': 'text/xml'});
+						res.end(twiml.toString());
+					});
+
+				});
+			};
 
 		}).catch(error => console.log(error));
 	});
