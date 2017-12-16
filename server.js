@@ -27,7 +27,6 @@ const runServer = () => {
 	require('./controllers/sms-controller')(app);
 	require('./controllers/handlebars-controller')(app);
 
-	console.log('run sync');
 	db.sequelize.sync({logging: false}).then((results) => {
 		console.log("Synced database models:" + results.modelManager.models.map((val) => {return "\n  " + val.name;}).join("") + "\n");
 		app.listen(PORT, () => {

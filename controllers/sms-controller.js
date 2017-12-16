@@ -46,6 +46,7 @@ module.exports = function(app) {
 
 	// receive sms from twilio webhook
 	app.post('/sms', (req, res) => {
+		console.log('req', req);
 		const userFrom = req.body.From;
 
 		// search db for sms sender phone number
@@ -148,6 +149,6 @@ module.exports = function(app) {
 				});
 			};
 
-		});
+		}).catch(error => console.log(error));
 	});
 };

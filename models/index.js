@@ -8,12 +8,8 @@ var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config/config.js')[env];
 var db        = {};
 
-console.log(`Sequelize Inputs ${env} ${config.database}, ${config.username}, ${config.password}`);
 
 var sequelize = new Sequelize(process.env.JAWSDB_URL, config);
-
-
-
 
 
 fs
