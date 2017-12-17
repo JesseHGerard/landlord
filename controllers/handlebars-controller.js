@@ -239,6 +239,14 @@ module.exports = function(app) {
           address: req.body.address
         }).then(data => {
 
+          // necessary?
+        // db.Landlord.create({
+        //   phone: req.body.landlordphone,
+        //   email: req.
+        // })
+        //
+        // }
+
           db.Tenant.create({
             phone: req.body.phone,
             email: req.body.email,
