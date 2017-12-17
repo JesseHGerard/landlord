@@ -12,6 +12,18 @@ $(document).ready(function() {
 
   });
 
+  $("#registerLocation").on("click", function(event) {
+    event.preventDefault();
+
+    var buildingAddress = $("#registerLocation").data("id");
+    // console.log(buildingId);
+
+    $.get("/api/register/building/" + buildingAddress).done(function(data) {
+      window.location.assign("/api/bothsignup/" + data.address);
+    });
+
+  });
+
   // Opening functions - yes or no
 
   $("#searchAddress").on("click", function(event) {
@@ -86,29 +98,70 @@ $(document).ready(function() {
   $("#newSign").on("click", function(event) {
     event.preventDefault();
 
-    // Creates a newUser object
-    var newUser = {
-      phone: $("#phone").val().trim(),
-      email: $("#email").val().trim(),
-      name: $("#name").val().trim(),
-      apt: $("#apt").val().trim(),
-      password: $("#password").val().trim(),
-      BuildingId: $("#title").data("id")
-    };
+    var blinker = $("#newSign").attr("blinker")
+    // var buildingId = $("#registerTenant").data("id");
+    console.log(blinker);
 
-    if (newUser.phone === "" || newUser.email === "" || newUser.name === "" || newUser.apt === "" || newUser.apt === "") {
-      alert("Please fill in all of the fields");
-    } else {
-      // Send an AJAX POST-request
-      $.post("/api/new", newUser).done(function(data) {
-        if (data) {
-          alert("Created a new account!");
-        } else {
-          alert("Updated an account!");
-        }
-		window.location.assign("/account-update/" + data);
-      });
+    if (blinker==="on") {
+
+      var newUser = {
+        phone: $("#phone").val().trim(),
+        email: $("#email").val().trim(),
+        name: $("#name").val().trim(),
+        apt: $("#apt").val().trim(),
+        password: $("#password").val().trim(),
+        BuildingId: $("#title").data("id")
+      };
+
+      if (newUser.phone === "" || newUser.email === "" || newUser.name === "" || newUser.apt === "" || newUser.apt === "") {
+        alert("Please fill in all of the fields");
+      } else {
+        // Send an AJAX POST-request
+        $.post("/api/new", newUser).done(function(data) {
+          if (data) {
+            alert("Created a new account!");
+          } else {
+            alert("Updated an account!");
+          }
+      window.location.assign("/account-update/" + data);
+        });
+      }
     }
+
+    else {
+
+      var newUser = {
+        phone: $("#phone").val().trim(),
+        email: $("#email").val().trim(),
+        name: $("#name").val().trim(),
+        apt: $("#apt").val().trim(),
+        password: $("#password").val().trim(),
+        address: $("#addressHolder").data("id"),
+        landlordphone: $("#landLordPhone").val().trim(),
+        landlordemail: $("#landLordEmail").val().trim()
+      };
+
+      if (newUser.phone === "" || newUser.email === "" || newUser.name === "" || newUser.apt === "" || newUser.apt === "" || newUser.landlordemail === "" || newUser.landlordphone === "") {
+        alert("Please fill in all of the fields");
+      } else {
+
+        console.log(newUser.landlordphone);
+        // Send an AJAX POST-request
+        $.post("/api/newboth", newUser).done(function(data) {
+          if (data) {
+            alert("Created a new account!");
+          } else {
+            alert("Updated an account!");
+          }
+      window.location.assign("/account-update/" + data);
+        });
+      }
+
+    }
+
+    // Creates a newUser object
+
+
   });
 
 

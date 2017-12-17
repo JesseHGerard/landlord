@@ -2,47 +2,111 @@
   <div class="jumbotron bg-info">
     <h1 class="text-light">Welcome Tennant</h1>
     <div id="title" data-id="{{title}}"></div>
+    <div id="addressHolder" data-id="{{address}}"></div>
+
     <p class="lead text-light">Let's get you started</p>
     <br>
     <h2>You are currently registering for: {{address}}</h2>
     <br>
-    {{# if condition }}
+    {{#if condition }}
 
     <!-- condition was met -->
 
-    <div class="row">
-      <form>
-        <div class="form-group">
-          <label for="Name">Name</label>
-          <input class="form-control formValid" id="name" aria-describedby="NameHelp" placeholder="Enter Name">
-        </div>
-        <div class="form-group">
-          <label for="Email">Email</label>
-          <input class="form-control formValid" id="email" placeholder="Email">
-        </div>
-        <div class="form-group">
-          <label for="Password">Password</label>
-          <input type="password" class="form-control formValid" id="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-          <label for="Apartment">Apartment</label>
-          <input class="form-control formValid" id="apt" placeholder="Apartment">
-        </div>
-        <div class="form-group">
-          <label for="Number">Phone Number</label>
-          <input class="form-control formValid" id="phone" placeholder="Number">
-        </div>
-        <div class="form-check">
-        </div>
-        <button type="submit" class="btn btn-primary" id="newSign">Submit</button>
-        </form>
+    <div class="jumbotron bg-success">
+      <h2>You're almost ready!</h2>
+      <hr class="my-4">
+      <p>Doublecheck that this is the right building</p>
+      <p>{{address}}</p>
+      <p class="lead">
+      </p>
     </div>
+
+    <h2>Register Tenant Form</h2>
+    <br>
+
+  <div class="row">
+    <form>
+      <div class="form-group">
+        <label for="Name">Name</label>
+        <input class="form-control formValid" id="name" aria-describedby="NameHelp" placeholder="Enter Name">
+      </div>
+      <div class="form-group">
+        <label for="Email">Email</label>
+        <input class="form-control formValid" id="email" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" class="form-control formValid" id="password" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <label for="Apartment">Apartment</label>
+        <input class="form-control formValid" id="apt" placeholder="Apartment">
+      </div>
+      <div class="form-group">
+        <label for="Number">Phone Number</label>
+        <input class="form-control formValid" id="phone" placeholder="Number">
+      </div>
+      <div class="form-check">
+      </div>
+      <button type="submit" class="btn btn-primary" blinker="on" id="newSign">Submit</button>
+      </form>
+  </div>
+
+    <!-- condition NOT met -->
 
     {{else}}
 
-      condition not met
+    <div class="jumbotron bg-warning">
+      <h2>Register your building here!</h2>
+      <hr class="my-4">
+      <p>Doublecheck that this is the right building</p>
+      <p>{{address}}</p>
+      <form>
+        <div class="form-group">
+          <label for="Name">Landlord's phone number</label>
+          <input class="form-control formValid" id="landLordPhone" aria-describedby="NameHelp" placeholder="Enter Landlord's Phone Number">
+        </div>
+        <div class="form-group">
+          <label for="Name">Landlord's email</label>
+          <input class="form-control formValid" id="landLordEmail" aria-describedby="NameHelp" placeholder="Enter Landlord's Email">
+        </div>
+      </form>
+    </div>
+
+    <h2>Register Tenant Form</h2>
+    <br>
+
+  <div class="row">
+    <form>
+      <div class="form-group">
+        <label for="Name">Name</label>
+        <input class="form-control formValid" id="name" aria-describedby="NameHelp" placeholder="Enter Name">
+      </div>
+      <div class="form-group">
+        <label for="Email">Email</label>
+        <input class="form-control formValid" id="email" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" class="form-control formValid" id="password" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <label for="Apartment">Apartment</label>
+        <input class="form-control formValid" id="apt" placeholder="Apartment">
+      </div>
+      <div class="form-group">
+        <label for="Number">Phone Number</label>
+        <input class="form-control formValid" id="phone" placeholder="Number">
+      </div>
+      <div class="form-check">
+      </div>
+      <button type="submit" class="btn btn-primary" blinker="off" id="newSign">Submit</button>
+      </form>
+  </div>
 
     {{/if}}
+
+
     <!-- row -->
     <!-- Name -->
     <!-- Email -->
