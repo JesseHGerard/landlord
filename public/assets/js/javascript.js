@@ -76,7 +76,7 @@ $(document).ready(function() {
 
         // window.location.assign("/api/number/");
       } else {
-        window.location.assign("/api/signup/" + data.buildingNumber);
+        window.location.assign("/api/signup/" + data.buildingNumber + "/" + data.address);
       }
 
       // window.location.assign("/api/number/");

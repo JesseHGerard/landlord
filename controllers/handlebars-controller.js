@@ -195,7 +195,7 @@ module.exports = function(app) {
           name: req.body.name,
           apt: req.body.apt,
           password: req.body.password,
-          userType: "tenant", 
+          userType: "tenant",
           BuildingId: req.body.BuildingId
         });
         res.send(true);
