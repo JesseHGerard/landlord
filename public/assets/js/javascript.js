@@ -1,19 +1,58 @@
 $(document).ready(function() {
 
+  $("#registerTenant").on("click", function(event) {
+    event.preventDefault();
+
+    var buildingId = $("#registerTenant").data("id");
+    console.log(buildingId);
+
+    $.get("/api/register/tenant/"+ buildingId).done(function(data) {
+      window.location.assign("/api/signup/" + data.buildingNumber + "/" + data.address);
+    });
+
+  });
+
   // Opening functions - yes or no
 
   $("#searchAddress").on("click", function(event) {
 
-    var address = $("#addressLookUp").val().trim();
+    var address = {address:$("#addressLookUp").val().trim()};
 
-    $.get("/yesno"+address).done(function(data) {
-      window.location.replace("/yesno"+address);
-    });
+    if (address.address==="") {
+      alert("Please fill in the address");
+    }
+    else {
+
+      $.post("/yesno", address).done(function(data) {
+
+        // Exists in our database
+        if (data.condition === true) {
+          alert("We found your location");
+          window.location.replace("/options/"+ data.address + "/update/" + data.buildingId);
+        }
+
+        // Doesnt exist in our database
+        else {
+          alert("Please enter a valid address " + data.address);
+          window.location.replace("/options/"+ data.address + "/make");
+        }
+
+        // window.location.replace("/yesno"+address);
+      });
+
+    }
+
   });
 
   $("#yes").on("click", function(event) {
     $.get("/api/search/").done(function(data) {
       window.location.replace("/api/search/");
+    });
+  });
+
+  $('.home').on("click", function(event) {
+    $.get("/").done(function(data) {
+      window.location.replace("/");
     });
   });
 
