@@ -15,7 +15,7 @@
         <!-- Row -->
         <div class="row">
           <div class="col-md-12">
-            <h2 class="text-light">Let's find your address to set you up</h2>
+            <h3 class="text-light">Let's find your address to set you up</h3>
             <br>
             <input class="form-control" id="addressLookUp" placeholder="Enter address here">
 
@@ -28,10 +28,10 @@
           </div>
 
         </div>
-        <!-- <h1 class="text-light">SerfBoard</h1> -->
-        <!-- <p class="lead text-light">An application to streamline tenant feedback.</p> -->
         <br>
         <br>
+
+
         <div class="row">
           <div class="col-md-12">
             <h3>Have a SerfBoard number already?</h3>
@@ -48,6 +48,11 @@
 
         </div>
 
+
+        <!-- <h1 class="text-light">SerfBoard</h1> -->
+        <!-- <p class="lead text-light">An application to streamline tenant feedback.</p> -->
+
+
 					<!-- <div class="col-md-8 offset-2">
 						<h2>First, have you texted a serfBoard number or know what your serfBoard number is?</h2>
 
@@ -57,6 +62,36 @@
 
 
       </div>
+      <!-- TRUE IF CONDITION -->
+      {{#if condition }}
+
+      <div class="jumbotron bg-success">
+        <h2>It looks like there is a SerfBoard at your location:</h2>
+        <hr class="my-4">
+        <p>Is this the right board?</p>
+        <p>{{address}}</p>
+        <p class="lead">
+          <a class="btn btn-primary btn-lg" href="#" role="button" data-id="{{building}}" id="registerTenant">Register a new Tenant</a>
+        </p>
+      </div>
+
+      <!-- END OF TRUE IF CONDITION -->
+      {{else}}
+
+      <!-- FALSE IF CONDITION -->
+
+
+      <div class="jumbotron bg-warning">
+        <h2>It looks like there isn't a SerfBoard at your location:</h2>
+        <hr class="my-4">
+        <p>Would you like to start a board at this location?</p>
+        <p>{{address}}</p>
+        <p class="lead">
+          <a class="btn btn-primary btn-lg" href="#" role="button" data-id="{{address}}" id="registerLocation">Register this location</a>
+        </p>
+      </div>
+
+      {{/if}}
 
     </div>
 

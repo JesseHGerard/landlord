@@ -9,10 +9,68 @@ module.exports = function(app) {
     res.render("index");
   });
 
+  app.get("/options/:id/:bool/:building?", function(req,res) {
 
-  app.get("/yesno:id", function(req, res) {
-    console.log(req.params.id);
-    res.render("yesno");
+    var addressChange = req.params.id;
+    var bool = req.params.bool;
+    var buildingId = req.params.building;
+
+    if (bool==="update") {
+        res.render("options", {title:"We found you!", condition:true, address:addressChange, building:buildingId});
+    }
+
+    else {
+        res.render("options", {title:"We couldn't find you!", condition:false, address:addressChange});
+    }
+
+    // console.log(req.params.id);
+    // res.render("options", {title:"hello", condition:true});
+    //
+    // var addressOptions = req.params.id;
+
+  });
+
+
+  app.post("/yesno", function(req, res) {
+    console.log(req.body.address);
+
+    var addressGiven = req.body.address;
+
+    db.Building.findOne({
+      where: {
+        address: addressGiven
+      }
+    })
+    .then(data => {
+      console.log(data);
+
+      // Record doesn't exist
+
+      if (data === null) {
+        res.json({
+          condition: false,
+          address: addressGiven
+        });
+      }
+      //
+      // Test
+      // if (data === null) {
+      //   res.render("options", {title:"rendertest", condition:true});
+      // }
+
+
+      // Record exists
+
+      else {
+        res.json({
+          condition:true,
+          address: addressGiven,
+          buildingId: data.id
+        });
+      }
+    })
+
+    // res.render("yesno");
   });
 
   // Congratulations you have updated!
@@ -23,9 +81,41 @@ module.exports = function(app) {
 
   app.get("/api/congratulations/false", function(req, res) {
     // false updates new account
-      res.render("congratulations2");
+    res.render("congratulations2");
   });
 
+  app.get("/api/register/building/:id", function(req,res) {
+    var address = req.params.id;
+
+    res.json({
+      address: req.params.id
+    });
+  });
+
+  app.get("/api/bothsignup/:id", function(req,res) {
+    var address = req.params.id;
+    res.render("signup", {
+      condition: false,
+      address: address
+    });
+  });
+
+  app.get("/api/register/tenant/:id", function(req,res) {
+
+    var buildingId = req.params.id;
+
+    db.Building.findOne({
+      where: {
+        id: buildingId
+      }
+    })
+    .then(data => {
+      res.json({
+        buildingNumber: data.id,
+        address: data.address
+      });
+    });
+  });
 
   // Number Creation
   app.get("/api/number/:id", function(req, res) {
@@ -49,7 +139,8 @@ module.exports = function(app) {
         } else {
           res.json({
             condition: false,
-            buildingNumber: data.id
+            buildingNumber: data.id,
+            address: data.address
           });
         }
       });
@@ -86,12 +177,14 @@ module.exports = function(app) {
   //   res.render("signup");
   // })
 
-  app.get("/api/signup/:id", function(req, res) {
+  app.get("/api/signup/:id/:address", function(req, res) {
     var title = req.params.id;
+    var address = req.params.address;
     // res.render("signup");
     res.render("signup", {
       title: title,
-      condition: true
+      condition: true,
+      address: address
     });
   })
 
@@ -118,6 +211,7 @@ module.exports = function(app) {
           name: req.body.name,
           apt: req.body.apt,
           password: req.body.password,
+          userType: "tenant",
           BuildingId: req.body.BuildingId
         });
         res.send(true);
@@ -136,6 +230,62 @@ module.exports = function(app) {
         res.send(false);
       }
     });
+  });
+
+  app.post("/api/newboth", function(req, res) {
+
+        db.Building.create({
+          phone: "holder",
+          address: req.body.address
+        }).then(data => {
+
+          // necessary?
+        // db.Landlord.create({
+        //   phone: req.body.landlordphone,
+        //   email: req.
+        // })
+        //
+        // }
+
+          db.Tenant.create({
+            phone: req.body.phone,
+            email: req.body.email,
+            name: req.body.name,
+            apt: req.body.apt,
+            password: req.body.password,
+            userType: "tenant",
+            BuildingId: data.id
+          });
+
+          res.send(true);
+
+        });
+
+      //   db.Tenant.create({
+      //     phone: req.body.phone,
+      //     email: req.body.email,
+      //     name: req.body.name,
+      //     apt: req.body.apt,
+      //     password: req.body.password,
+      //     userType: "tenant",
+      //     BuildingId: req.body.BuildingId
+      //   });
+      //   res.send(true);
+      // } else {
+      //   db.Tenant.update({
+      //     email: req.body.email,
+      //     name: req.body.name,
+      //     apt: req.body.apt,
+      //     password: req.body.password,
+      //     BuildingId: req.body.BuildingId
+      //   }, {
+      //     where: {
+      //       phone: req.body.phone
+      //     }
+      //   });
+      //   res.send(false);
+      // }
+    // });
   });
 
 
