@@ -10,7 +10,7 @@ const checkEnv = () => {
 	return new Promise(resolve => {
 
 		// define keys that need to be added regardless of environment here
-		process.env.siteUrl = 'https://serfbord.herokuapp.com';
+		process.env.siteUrl = 'https://serfboard.herokuapp.com';
 
 		if (process.env.heroku){
 			console.log("env is heroku, using available process.env's")

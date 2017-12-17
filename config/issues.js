@@ -8,7 +8,7 @@ const issues = {
     mice: ['mouse', 'mice', 'mose', 'mous', 'mic']
   },
   infrastructure: {
-    leaks: ['leak', 'leaks', 'leek', 'leeks', 'lek', 'leks', 'lake', 'lakes'],
+    leaks: ['leak', 'leaks', 'leek', 'leeks', 'lek', 'leks', 'lake', 'lakes', 'leaking', 'leaky'],
     bulbs: ['bulb burned-out', 'bulbs burned-out', 'bulb', 'blubs', 'bolb', 'bolbs', 'light', 'light-bulb', 'lights']
   },
   people: {

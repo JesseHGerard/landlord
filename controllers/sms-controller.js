@@ -83,7 +83,7 @@ module.exports = function(app) {
 						newUserSetUp[userFrom].aptStatus = false;
 						// send appartment number request
 						const twiml = new MessagingResponse();
-						twiml.message(`Thanks ${req.body.Body} \n2. Which apartment are you in?`);
+						twiml.message(`Thanks ${req.body.Body} \n2. What is your apparment number?`);
 						res.writeHead(200, {'Content-Type': 'text/xml'});
 						res.end(twiml.toString());
 					});
