@@ -221,7 +221,7 @@ module.exports = function(app) {
 
 
       res.render("tenant-dash", {quantity:information.data, information:information.labels, object:data});
-
+    })
 	// res.json(req.user);
   // console.log(req.user.BuildingId);
     });
