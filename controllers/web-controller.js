@@ -169,5 +169,9 @@ module.exports = function(app) {
   app.get("/dashboard", isAuthenticated, (req, res) => {
 	res.json(req.user);
   });
-  
+
+  app.get("/signup/landlord", (req,res) => {
+    res.render("landlordsignup")
+  })
+
 };
