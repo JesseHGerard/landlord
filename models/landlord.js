@@ -60,19 +60,19 @@ module.exports = function(sequelize, DataTypes) {
 			}
 		});
 	};
-	
+
 	Landlord.prototype.validPassword = function(password) {
 		return bcrypt.compareSync(password, this.password);
 	};
-	
+
 	Landlord.hook("beforeCreate", function(instance) {
 		if (instance.password) instance.password = bcrypt.hashSync(instance.password, bcrypt.genSaltSync(10), null);
 	});
-	
+
 	Landlord.hook("beforeBulkUpdate", function(instances) {
 		instances.individualHooks = true;
 	});
-	
+
 	Landlord.hook("beforeUpdate", function(instance, options) {
 		if (options.fields.includes("password")) {
 			instance.password = bcrypt.hashSync(instance.password, bcrypt.genSaltSync(10), null);

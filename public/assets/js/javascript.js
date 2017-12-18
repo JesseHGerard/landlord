@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+  $("#registerLandLord").on("click", function(event) {
+    event.preventDefault();
+
+    window.location.replace("/signup/landlord");
+
+  })
+
   // chartjs //////////////////////////
 
   /*$.get("/tenant/dash/").done(function(data) {
@@ -78,14 +85,14 @@ $(document).ready(function() {
     });
 
   });
-  
+
   $("#signin-form").on('submit', (event) => {
 	event.preventDefault();
-	
+
 	var email = $("#email").val().trim();
 	var password = $("#password").val().trim();
 	var userType = $("#is-landlord").is(":checked") ? 'landlord' : 'tenant';
-	
+
 	if (email && email.length > 0 && password && password.length > 0) {
 	  $.post("/api/login", {
 		userType: userType,
@@ -237,6 +244,28 @@ $(document).ready(function() {
       });
     }
   });
+
+
+  $("#newLandLord").on("click", function(event) {
+    event.preventDefault();
+
+    var newLandlord = {
+      name: $("#name").val().trim(),
+      email: $("#email").val().trim(),
+      password: $("#password").val().trim(),
+      phone: $("#phone").val().trim(),
+      address: $("#addressLookUp").val().trim()
+    };
+
+    $.post("/api/building-landlord", newLandlord).done(function(data) {
+      if (data) {
+        alert("Created a new account!");
+        window.location.assign("/account-update/true");
+      }
+    });
+
+
+  })
 
 
 });
