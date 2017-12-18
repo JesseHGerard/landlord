@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 		},
 		class: {
-			type: DataTypes.ENUM('Pest', 'Infrastructure', 'People'),
+			type: DataTypes.ENUM('Pests', 'Infrastructure', 'People'),
 			allowNull: true,
 		}
 	});
@@ -44,7 +44,7 @@ module.exports = function(sequelize, DataTypes) {
 			case 'Roaches':
 			case 'Bed Bugs':
 			case 'Mice':
-				return 'Pest';
+				return 'Pests';
 			case 'Leak':
 			case 'Light Bulb':
 				return 'Infrastructure';

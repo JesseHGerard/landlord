@@ -171,7 +171,7 @@ module.exports = function(app) {
     }
   });
 
-  app.get("/dashboard", isAuthenticated, (req, res) => {
+  app.get("/userData", isAuthenticated, (req, res) => {
 	res.json(req.user);
   });
 

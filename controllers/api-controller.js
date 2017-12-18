@@ -1,10 +1,12 @@
 var db = require("../models");
 var passport = require("../config/passport");
 
+var moment = require('moment');
+
 module.exports = function(app) {
 
 	app.post("/api/login", passport.authenticate("local"), (req, res) => {
-		res.json("/dashboard"); // To-do: change this to reflect actual urls
+		res.json("/"); // To-do: change this to reflect actual urls
 	});
 
 	app.post("/api/tenant", (req, res) => {
@@ -137,6 +139,18 @@ module.exports = function(app) {
 			res.json(err);
 		});
 	});
+	
+	app.get("/api/building/", (req, res) => {
+		if (!req.user) return res.status(401).end(); // 401 means unauthorized
+		
+		var include = [db.Tenant, db.Landlord, db.Issue];
+		db.Building.findOne({where: {id: req.user.BuildingId}, include: include}).then(data => {
+			res.json(data);
+		}).catch(err => {
+			console.log(err);
+			res.json(err);
+		});
+	});
 
 	app.get("/api/building/:id", (req, res) => {
 		var include = req.user ? [db.Tenant, db.Landlord, db.Issue] : [db.Landlord];
@@ -173,6 +187,117 @@ module.exports = function(app) {
 
 		db.Issue.create(req.body).then(dbResponse => {
 			res.json(dbResponse); // To-do: change this based on the needs of the website
+		}).catch(err => {
+			console.log(err);
+			res.json(err);
+		});
+	});
+	
+	app.get("/api/issues", (req, res) => {
+		if (!req.user) return res.status(401).end(); // 401 means unauthorized
+		
+		db.Issue.findAll({
+			where: {
+				BuildingId: req.user.BuildingId
+			},
+			include: [db.Tenant, db.Building],
+			order: [['createdAt', 'DESC']],
+		}).then(issues => {
+			res.json(issues);
+		}).catch(err => {
+			console.log(err);
+			res.json(err);
+		});
+	});
+	
+	app.get("/api/issues/class/:class", (req, res) => {
+		if (!req.user) return res.status(401).end(); // 401 means unauthorized
+		
+		db.Issue.findAll({
+			where: {
+				BuildingId: req.user.BuildingId,
+				[db.sequelize.Op.and]: {class: (req.params.class === 'null' ? null : req.params.class)},
+			},
+			include: [db.Tenant, db.Building],
+			order: [['createdAt', 'DESC']],
+		}).then(issues => {
+			res.json(issues);
+		}).catch(err => {
+			console.log(err);
+			res.json(err);
+		});
+	});
+	
+	app.get("/api/issues/category/:category", (req, res) => {
+		if (!req.user) return res.status(401).end(); // 401 means unauthorized
+		
+		db.Issue.findAll({
+			where: {
+				BuildingId: req.user.BuildingId,
+				[db.sequelize.Op.and]: {category: (req.params.category === 'null' ? null : req.params.category)},
+			},
+			include: [db.Tenant, db.Building],
+			order: [['createdAt', 'DESC']],
+		}).then(issues => {
+			res.json(issues);
+		}).catch(err => {
+			console.log(err);
+			res.json(err);
+		});
+	});
+	
+	app.get("/api/issues/reporter/:tenantUuid", (req, res) => {
+		if (!req.user) return res.status(401).end(); // 401 means unauthorized
+		
+		db.Issue.findAll({
+			where: {
+				BuildingId: req.user.BuildingId,
+				[db.sequelize.Op.and]: {TenantUuid: (req.params.tenantUuid === 'null' ? null : req.params.tenantUuid)},
+			},
+			include: [db.Tenant, db.Building],
+			order: [['createdAt', 'DESC']],
+		}).then(issues => {
+			res.json(issues);
+		}).catch(err => {
+			console.log(err);
+			res.json(err);
+		});
+	});
+	
+	app.get("/api/issues/time/:window", (req, res) => {
+		if (!req.user) return res.status(401).end(); // 401 means unauthorized
+		
+		var oldest;
+		switch(req.params.window) {
+		case 'Hour':
+			oldest = moment().subtract(1, 'hours').format();
+			break;
+		case 'Day':
+			oldest = moment().subtract(1, 'days').format();
+			break;
+		case 'Week':
+			oldest = moment().subtract(1, 'weeks').format();
+			break;
+		case 'Month':
+			oldest = moment().subtract(1, 'months').format();
+			break;
+		case 'Year':
+			oldest = moment().subtract(1, 'years').format();
+			break;
+		default:
+			oldest = new Date();
+			break;
+		}
+		
+		db.Issue.findAll({
+			where: {
+				BuildingId: req.user.BuildingId,
+				[db.sequelize.Op.and]: {createdAt: {[db.sequelize.Op.gt]: oldest}},
+			},
+			include: [db.Tenant, db.Building],
+			order: [['createdAt', 'DESC']],
+		}).then(issues => {
+			res.json(issues);
 		}).catch(err => {
 			console.log(err);
 			res.json(err);
