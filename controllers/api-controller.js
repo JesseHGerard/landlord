@@ -16,15 +16,15 @@ module.exports = function(app) {
 		
 		if (req.body.userType === 'tenant') {
 			var tenant = {userType: 'tenant'};
-			if (req.body.phone) tenant.phone = phone;
-			if (req.body.email) tenant.email = email;
-			if (req.body.name) tenant.name = name;
-			if (req.body.apt) tenant.apt = apt;
-			if (req.body.password) tenant.password = password;
-			if (req.body.BuildingId) tenant.BuildingId = BuildingId;
+			if (req.body.phone) tenant.phone = req.body.phone;
+			if (req.body.email) tenant.email = req.body.email;
+			if (req.body.name) tenant.name = req.body.name;
+			if (req.body.apt) tenant.apt = req.body.apt;
+			if (req.body.password) tenant.password = req.body.password;
+			if (req.body.BuildingId) tenant.BuildingId = req.body.BuildingId;
 			
 			if (req.body.phone) {
-				db.Tennant.findAll({where: {phone: req.body.phone}}).then(data => {
+				db.Tenant.findAll({where: {phone: req.body.phone}}).then(data => {
 					if (data.length > 0) {
 						db.Tenant.update(tenant, {where: {phone: req.body.phone}}).then(() => {res.json(false);}).catch(errorHandler);
 					} else {
@@ -36,11 +36,11 @@ module.exports = function(app) {
 			}
 		} else if (req.body.userType === 'landlord') {
 			var landlord = {userType: 'landlord'};
-			if (req.body.phone) landlord.phone = phone;
-			if (req.body.email) landlord.email = email;
-			if (req.body.name) landlord.name = name;
-			if (req.body.password) landlord.password = password;
-			if (req.body.BuildingId) landlord.BuildingId = BuildingId;
+			if (req.body.phone) landlord.phone = req.body.phone;
+			if (req.body.email) landlord.email = req.body.email;
+			if (req.body.name) landlord.name = req.body.name;
+			if (req.body.password) landlord.password = req.body.password;
+			if (req.body.BuildingId) landlord.BuildingId = req.body.BuildingId;
 			
 			db.Landlord.create({
 				phone: req.body.phone,
