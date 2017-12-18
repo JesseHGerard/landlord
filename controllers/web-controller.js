@@ -30,7 +30,7 @@ module.exports = function(app) {
   // should probably be in api-controller, but I guess it's fine here because it's so specialized
   app.get('/autocomplete', (req, res) => {
     db.Building.findAll({
-      attributes: ['address']
+      attributes: ['address', 'lat', 'lng', 'id']
     }).then(data => res.json(data));
   });
 

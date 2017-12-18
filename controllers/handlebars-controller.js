@@ -9,12 +9,6 @@ module.exports = function(app) {
     res.render("index");
   });
 
-  app.get('/autocomplete', (req, res) => {
-    db.Building.findAll({
-      attributes: ['address', 'lat', 'lng', 'id']
-    }).then(data => res.json(data));
-  });
-
   app.get("/options/:id/:bool/:building?", function(req,res) {
 
     var addressChange = req.params.id;
