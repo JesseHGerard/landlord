@@ -20,11 +20,11 @@ $(document).ready(function() {
 
         // The data for our dataset
         data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            // labels: labelsArray,
+            // labels: ["January", "February", "March", "April", "May", "June", "July"],
+            labels: labelsArray,
             datasets: [{
                 label: "My First dataset",
-                // backgroundColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 // data: [0, 10, 5, 2, 20, 30, 45],
                 data: dataArray,
@@ -43,6 +43,17 @@ $(document).ready(function() {
   });
 
   // chartjs ///////////////////////
+
+  $("#newIssue").on("click", function(event) {
+    event.preventDefault();
+
+    var newIssue = $("#makeIssue").val().trim();
+
+    // $.post("/api/issue", newIssue).done(function(data) {
+    //   window.location.reload();
+    // })
+
+  })
 
   $("#registerTenant").on("click", function(event) {
     event.preventDefault();
