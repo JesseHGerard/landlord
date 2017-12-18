@@ -15,6 +15,12 @@ module.exports = function(sequelize, DataTypes) {
 				len: [1],
 			},
 		},
+		lat: {
+			type: DataTypes.FLOAT
+		},
+		lng: {
+			type: DataTypes.FLOAT
+		}
 	});
 
 	Building.associate = function(models) {

@@ -11,7 +11,7 @@ module.exports = function(app) {
 
   app.get('/autocomplete', (req, res) => {
     db.Building.findAll({
-      attributes: ['address']
+      attributes: ['address', 'lat', 'lng', 'id']
     }).then(data => res.json(data));
   });
 
