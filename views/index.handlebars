@@ -1,7 +1,10 @@
+<link href="https://fonts.googleapis.com/css?family=Barlow:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/jquery-ui.css">
+<link rel="stylesheet" href="assets/css/map.css">
 <main role="main" class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="jumbotron bg-primary">
+      <div class="jumbotron">
         <!-- Row -->
         <div class="row">
           <div class="col-md-12">
@@ -11,23 +14,23 @@
           </div>
 
         </div>
-        <hr>
-        <!-- Row -->
-        <div class="row">
-          <div class="col-md-12">
-            <h2 class="text-light">Let's find your address to set you up</h2>
-            <br>
-            <input class="form-control" id="addressLookUp" placeholder="Enter address here">
-
-          </div>
-          <div class="col-md-2 offset-5">
-            <br>
-            <button type="button" class="btn btn-success" id="searchAddress">Search</button>
 
 
-          </div>
+        <!-- search box and map -->
+        <div class="row justify-content-md-center">
+            <div id="search-box">
+              <input id="search-field" type="text" placeholder="find your apartment"></input>
+              <div id="search-button">search</div>
+            </div>
+            <div id="map"></div>
 
         </div>
+        <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM1CXYGhsyp8_8Rpq6sUo0ewr3py-ufw4">
+        </script>
+
+
+
         <!-- <h1 class="text-light">SerfBoard</h1> -->
         <!-- <p class="lead text-light">An application to streamline tenant feedback.</p> -->
         <br>
@@ -36,14 +39,14 @@
         <div class="row">
           <div class="col-md-6">
             <h3>Have a SerfBoard number already?</h3>
-            <button type="button" class="btn btn-success" id="yes">Click here</button>
+            <button type="button" class="btn btn-groovy" id="yes">Click here</button>
             <!-- <br>
             <input class="form-control" id="addressLookUp" placeholder="Enter address here"> -->
           </div>
 
           <div class="col-md-6">
             <h3>Are you a LandLord?</h3>
-            <button type="button" class="btn btn-success" id="registerLandLord">Register Here</button>
+            <button type="button" class="btn btn-groovy" id="registerLandLord">Register Here</button>
             <!-- <br>
             <input class="form-control" id="addressLookUp" placeholder="Enter address here"> -->
           </div>
@@ -70,6 +73,5 @@
 
   </div>
 </main>
-<link rel="stylesheet" href="assets/css/jquery-ui.css">
 <script src="assets/js/jquery-ui.min.js" type="text/javascript"></script>
-<script src="assets/js/autocomplete.js" type="text/javascript"></script>
+<script src="assets/js/map.js" type="text/javascript"></script>

@@ -17,6 +17,7 @@
 	},
 	"homepage": "https://github.com/JesseHGerard/landlord#readme",
 	"dependencies": {
+		"@google/maps": "^0.4.5",
 		"bcrypt-nodejs": "0.0.3",
 		"body-parser": "^1.18.2",
 		"express": "^4.16.2",

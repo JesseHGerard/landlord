@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Barlow:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <style>
+      html {
+        font-size: 10px;
+        font-family: 'Barlow', sans-serif;
+      }
+       #map {
+        height: 40rem;
+        max-height: 70vh;
+        width: 100%;
+        max-width: 80rem;
+        margin: 0;
+       }
+       #search-box {
+         width: 100%;
+         max-width: 80rem;
+         height: 5rem;
+         background-color: white;
+         padding: 0;
+         display: flex;
+         justify-content: space-between;
+         align-items: flex-end;
+       }
+       #search-field {
+         border: none;
+         width: 100%;
+         display: flex;
+         height: 4rem;
+         padding-left: 1rem;
+         margin: 0;
+         font-size: 2rem;
+       }
+       #search-field:focus {
+         outline: none;
+       }
+       #search-field::placeholder {
+         font-style: 'Barlow', sans-serif;
+         font-size: 2rem;
+         padding: 0;
+         margin: 0;
+       }
+       #search-button {
+         --button-color: grey;
+         width: auto;
+         height: 4rem;
+         display: flex;
+         background-color: white;
+         padding: 0 1.5rem .3rem 1.5rem;
+         margin: 0;
+         flex-shrink: 0;
+         border: .2rem solid;
+         border-color: var(--button-color);
+         color: var(--button-color);
+         border-radius: 1rem;
+         justify-content: center;
+         align-items: center;
+         font-size: 2rem;
+         font-weight: 500;
+       }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="search-box">
+      <input id="search-field" type="text" placeholder="address of your building"></input>
+      <div id="search-button">search</div>
+    </div>
+    <div id="map"></div>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM1CXYGhsyp8_8Rpq6sUo0ewr3py-ufw4">
+    </script>
+  </body>
+</html>
+<link rel="stylesheet" href="./assets/css/jquery-ui.css">
+<script src="./assets/js/jquery-ui.min.js"></script>
+<script>
+
+
+
+  let addressList = [];
+
+  let map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 12,
+    center: {lat: 38.897831, lng: -77.036537}
+  });
+
+
+
+  const createMarkers = (addresses) => {
+    for (index in addresses) {
+      if (addresses[index].lat != null && addresses[index].lng != null) {
+        let marker = new google.maps.Marker({
+          position: {lat: addresses[index].lat, lng: addresses[index].lng},
+          map: map,
+          clickable: true,
+          title: addresses[index].address,
+        });
+        google.maps.event.addListener(marker, 'click', () => {
+          $('#search-field').val(marker.title);
+        });
+      };
+    };
+  };
+
+
+  const googleGeolocation = () => {
+    $.ajax({
+      method: 'POST',
+      url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyD1DN3tpYpimK7iGgLidaYCqHEo1hrbgwg"
+    }).then((location, message) => {
+      if (message) console.log(`google geolocation used: ${message}`);
+      map.setCenter(location.location);
+    });
+  }
+
+  // center map, try first with geolocation web api, else use google geolocate
+  navigator.geolocation.getCurrentPosition((location) => {
+    console.log(`web geolocation api success`);
+    map.setCenter({lat: location.coords.latitude, lng: location.coords.longitude});
+  }, (error) => {
+    googleGeolocation()
+  });
+
+
+
+
+
+
+  const searchInputAddress = () => {
+    let isEstablishedAddress = false;
+    for (index in addressList) {
+      if (addressList[index] === $('#search-field').val()) {
+        isEstablishedAddress = true;
+      };
+    };
+    if (isEstablishedAddress) {
+      $('#search-button').css('--button-color', 'blue').text('sign up');
+    } else {
+      if ($('#search-field').val() === '') {
+        $('#search-button').css('--button-color', 'grey').text('search');
+      } else {
+        $('#search-button').css('--button-color', 'red').text('add new building');
+      }
+    }
+  };
+
+  // get building list
+  $.ajax({
+    method: 'GET',
+    url: '/autocomplete'
+  }).then(addresses => {
+    // create autocomplete
+    for (address in addresses) {addressList.push(addresses[address].address)};
+    $( "#search-field" ).autocomplete({source: addressList});
+
+    // create createMarkers
+    createMarkers(addresses);
+  });
+
+  // update seach button
+  $('#search-field').bind('input', function() {
+    searchInputAddress();
+  });
+  $(document).on('click', function() {
+    searchInputAddress();
+  });
+
+  // search button behavior
+  $('#search-button').on('click', function() {
+    let inputAddress = $('#search-field').val();
+
+    if ($('#search-button').text() === 'add new building') {
+      let geocoder = new google.maps.Geocoder();
+      geocoder.geocode({address: inputAddress}, function(res, status) {
+        if (inputAddress === res[0].formatted_address) {
+          $('#search-button').css('--button-color', 'green');
+        } else {
+          let newMarker = new google.maps.Marker({
+            position: res[0].geometry.location,
+            map: map,
+            clickable: true,
+          });
+          map.setCenter(res[0].geometry.location);
+          map.zoom = 8
+          $('#search-field').val(res[0].formatted_address);
+        };
+      });
+
+    } else if ($('#search-button').text() === 'sign up') {
+      $.ajax({
+        method: ''
+      })
+    }
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<!--  -->
