@@ -36,6 +36,7 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		lastLogin: {
 			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW,
 		},
 		userType: {
 			type: DataTypes.ENUM('landlord'),

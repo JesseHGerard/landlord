@@ -6,7 +6,18 @@ var isAuthenticated = require("../config/middleware/isAuthenticated");
 module.exports = function(app) {
 
   app.get("/", function(req, res) {
-    res.render("index");
+	//if (req.user && req.user.userType === 'tenant') return res.redirect("/tenant/dash");
+	//if (req.user && req.user.userType === 'landlord') return res.redirect("/landlord/dash");
+	if (req.user && req.user.userType === 'tenant') {
+		db.Issue.findAll({
+			where: {
+				BuildingId: req.user.BuildingId
+			},
+			order: [['createdAt', 'DESC']],
+		}).then(issues => {
+			res.render("dashboard", {user: req.user, issues: issues});
+		});
+	} else res.render("index");
   });
 
   app.get("/account-update/:created", function(req, res) {
@@ -66,7 +77,7 @@ module.exports = function(app) {
     // res.render("yesno");
   });
 
-  app.get("/api/bothsignup/:id", function(req, res) {
+  app.get("/signup-b/:id", function(req, res) {
     var address = req.params.id;
     res.render("signup", {
       condition: false,
@@ -115,10 +126,8 @@ module.exports = function(app) {
     res.render("building");
   })
 
-  app.get("/tenant/dash/:id", function(req,res) {
-
-    var id = req.params.id;
-
+  app.get("/tenant/dash/", isAuthenticated, function(req,res) {
+    var id = req.user.BuildingId;
     var information = {
       labels : [],
       data : []
@@ -126,16 +135,12 @@ module.exports = function(app) {
 
     db.Issue.findAll({
       where: {
-        BuildingId:id
-      }
+        BuildingId: id
+      },
     }).then(data => {
-
-      // var information = {
-      //   information:data
-      // };
-      //
-      console.log(data[0].description);
-      console.log(data[0].createdAt);
+      // var information = {information:data};
+      if (data.length > 0) console.log(data[0].description);
+      if (data.length > 0) console.log(data[0].createdAt);
 
       for (var i = 0; i < data.length; i++) {
         var date = data[i].createdAt.toString().substring(4,9);
@@ -153,5 +158,16 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/signin", (req, res) => {
+	if (req.user) {
+      res.redirect("/");
+    } else {
+      res.render("signin");
+    }
+  });
 
+  app.get("/dashboard", isAuthenticated, (req, res) => {
+	res.json(req.user);
+  });
+  
 };

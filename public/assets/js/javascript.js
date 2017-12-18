@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   // chartjs //////////////////////////
 
-  $.get("/tenant/dash/1").done(function(data) {
+  /*$.get("/tenant/dash/").done(function(data) {
 
     // console.log(data);
     // console.log(data.information);
@@ -40,7 +40,7 @@ $(document).ready(function() {
         // Configuration options go here
         options: {}
     });
-  });
+  });*/
 
   // chartjs ///////////////////////
 
@@ -74,9 +74,30 @@ $(document).ready(function() {
     // console.log(buildingId);
 
     $.get("/api/register/building/" + buildingAddress).done(function(data) {
-      window.location.assign("/api/bothsignup/" + data.address);
+      window.location.assign("/signup-b/" + data.address);
     });
 
+  });
+  
+  $("#signin-form").on('submit', (event) => {
+	event.preventDefault();
+	
+	var email = $("#email").val().trim();
+	var password = $("#password").val().trim();
+	var userType = $("#is-landlord").is(":checked") ? 'landlord' : 'tenant';
+	
+	if (email && email.length > 0 && password && password.length > 0) {
+	  $.post("/api/login", {
+		userType: userType,
+		email: email,
+		password: password,
+	  }).done(data => {
+		window.location.replace(data);
+	  }).fail(err => {
+		  console.log(err);
+		  if (err.status === 401) alert("Incorrect email or password");
+	  });
+	}
   });
 
   // Opening functions - yes or no

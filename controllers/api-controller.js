@@ -3,8 +3,8 @@ var passport = require("../config/passport");
 
 module.exports = function(app) {
 	
-	app.post("/api/login", passport.authenticate("local", {failureFlash: true}), (req, res) => {
-		res.redirect("/dashboard"); // To-do: change this to reflect actual urls
+	app.post("/api/login", passport.authenticate("local"), (req, res) => {
+		res.json("/dashboard"); // To-do: change this to reflect actual urls
 	});
 	
 	app.post("/api/tenant", (req, res) => {
@@ -25,7 +25,7 @@ module.exports = function(app) {
 			
 			if (req.body.phone) {
 				db.Tenant.findAll({where: {phone: req.body.phone}}).then(data => {
-					if (data.length > 0) {
+					if (data && data.length > 0) {
 						db.Tenant.update(tenant, {where: {phone: req.body.phone}}).then(() => {res.json(false);}).catch(errorHandler);
 					} else {
 						db.Tenant.create(tenant).then(() => {res.json(true);}).catch(errorHandler);
@@ -34,7 +34,19 @@ module.exports = function(app) {
 			} else {
 				db.Tenant.create(tenant).then(() => {res.json(true);}).catch(errorHandler);
 			}
-		} else if (req.body.userType === 'landlord') {
+		} else {
+			res.status(404).end();
+		}
+	});
+	
+	app.post("/api/landlord", (req, res) => {
+		//console.log(req.body);
+		var errorHandler = function(err) {
+			console.log(err);
+			res.json(err);
+		};
+		
+		if (req.body.userType === 'landlord') {
 			var landlord = {userType: 'landlord'};
 			if (req.body.phone) landlord.phone = req.body.phone;
 			if (req.body.email) landlord.email = req.body.email;
@@ -42,14 +54,28 @@ module.exports = function(app) {
 			if (req.body.password) landlord.password = req.body.password;
 			if (req.body.BuildingId) landlord.BuildingId = req.body.BuildingId;
 			
-			db.Landlord.create({
-				phone: req.body.phone,
-				email: req.body.email,
-				name: req.body.name,
-				password: req.body.password,
-				userType: "landlord",
-				BuildingId: req.body.BuildingId
-			}).then(() => {res.redirect(307, "/api/login");}).catch(errorHandler);
+			if (req.body.phone || req.body.email) {
+				var where;
+				if (req.body.phone && req.body.email) {
+					where = {[db.sequelize.Op.or]: [{phone: req.body.phone}, {email: req.body.email}]};
+				} else if (req.body.phone) {
+					where = {phone: req.body.phone};
+				} else if (req.body.email) {
+					where = {email: req.body.email};
+				}
+				
+				db.Landlord.findAll({where: where}).then(data => {
+					if (data && data.length > 0) {
+						db.Landlord.update(landlord, {where: where}).then(() => {res.json(false);}).catch(errorHandler);
+					} else {
+						db.Landlord.create(landlord).then(() => {res.json(true);}).catch(errorHandler);
+					}
+				}).catch(errorHandler);
+			} else {
+				db.Landlord.create(landlord).then(() => {res.json(true);}).catch(errorHandler);
+			}
+		} else {
+			res.status(404).end();
 		}
 	});
 	
