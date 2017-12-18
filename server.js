@@ -22,21 +22,26 @@ const runServer = () => {
 	app.use(passport.session());
 	app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 	app.set("view engine", "handlebars");
+	
+	require("./views/blocks/blocks");
 
 	require('./controllers/api-controller')(app);
+	require('./controllers/web-controller')(app);
 	require('./controllers/sms-controller')(app);
-	require('./controllers/handlebars-controller')(app);
 
 	db.sequelize.sync({logging: false}).then((results) => {
 		console.log("Synced database models:" + results.modelManager.models.map((val) => {return "\n  " + val.name;}).join("") + "\n");
+		
+		//db.Issue.sync({force: true});
+		
 		app.listen(PORT, () => {
 			console.log("Server listening on port " + PORT);
 		});
 	}).catch(error => console.log(error));
 };
+//runServer();
 
+checkEnv().then(resolve => {
+ 	runServer();
+});
 
-checkEnv()
-.then(resolve => {
-	runServer();
-}).catch(error => console.log(error));

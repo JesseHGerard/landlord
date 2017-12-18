@@ -1,46 +1,94 @@
 var db = require("../models");
 var passport = require("../config/passport");
+var moment = require("moment");
 
 var isAuthenticated = require("../config/middleware/isAuthenticated");
 
 module.exports = function(app) {
 
   app.get("/", function(req, res) {
-    res.render("index");
+	//if (req.user && req.user.userType === 'tenant') return res.redirect("/tenant/dash");
+	//if (req.user && req.user.userType === 'landlord') return res.redirect("/landlord/dash");
+	if (req.user && req.user.userType === 'tenant') {
+		db.Issue.findAll({
+			where: {
+				BuildingId: req.user.BuildingId
+			},
+			include: [db.Tenant, db.Building],
+			order: [['createdAt', 'DESC']],
+		}).then(issues => {
+			// console.log(JSON.stringify(issues, null, 2));
+			res.render("dashboard", {user: req.user, issues: issues});
+		});
+	} else res.render("index");
   });
 
-  // Congratulations you have updated!
   app.get("/account-update/:created", function(req, res) {
-      res.render("account-update", {created: (req.params.created === 'true')});
+    res.render("account-update", {created: (req.params.created === 'true')});
   });
 
-  // Number Creation
-  app.get("/api/number/:id", function(req, res) {
+  // should probably be in api-controller, but I guess it's fine here because it's so specialized
+  app.get('/autocomplete', (req, res) => {
+    db.Building.findAll({
+      attributes: ['address']
+    }).then(data => res.json(data));
+  });
 
-    var buildingNumber = req.params.id;
+  app.get("/options/:id/:bool/:building?", function(req,res) {
+    var addressChange = req.params.id;
+    var bool = req.params.bool;
+    var buildingId = req.params.building;
+
+    if (bool==="update") {
+        res.render("options", {title:"We found you!", condition:true, address:addressChange, building:buildingId});
+    } else {
+        res.render("options", {title:"We couldn't find you!", condition:false, address:addressChange});
+    }
+    // console.log(req.params.id);
+    // res.render("options", {title:"hello", condition:true});
+  });
+
+  // should probably be in api-controller, but I guess it's fine here because it's so specialized
+  app.post("/yesno", function(req, res) {
+    console.log(req.body.address);
+
+    var addressGiven = req.body.address;
 
     db.Building.findOne({
-        where: {
-          phone: buildingNumber
-        }
-      })
-      .then(data => {
+      where: {
+        address: addressGiven
+      }
+    }).then(data => {
+      console.log(data);
 
-        console.log(data);
+      if (data === null) { // Record doesn't exist
+		// testing
+		// res.render("options", {title:"rendertest", condition:true});
 
-        if (data === null) {
-          res.json({
-            condition: true,
-            buildingNumber: buildingNumber
-          });
-        } else {
-          res.json({
-            condition: false,
-            buildingNumber: data.id
-          });
-        }
-      });
+        res.json({
+          condition: false,
+          address: addressGiven
+        });
+      } else { // Record exists
+        res.json({
+          condition:true,
+          address: addressGiven,
+          buildingId: data.id
+        });
+      }
+    })
+    // res.render("yesno");
+  });
 
+  app.get("/signup-b/:id", function(req, res) {
+    var address = req.params.id;
+    res.render("signup", {
+      condition: false,
+      address: address
+    });
+  });
+
+  app.get("/number/:id", function(req, res) {
     // var findNumber = req.params.id;
     //
     // var food = false;
@@ -50,9 +98,7 @@ module.exports = function(app) {
     // 	console.log("true!")
     //     res.render("signup", { title: 'true title', condition: true});
     // 		// res.status("signup").send(false);
-    // }
-    //
-    // else {
+    // } else {
     // 		res.render("signup", { title: 'false title', condition: false});
     // 		console.log("false")
     // 		// res.status("signup").send(true);
@@ -60,84 +106,75 @@ module.exports = function(app) {
     //
     // console.log("Look this number up " + findNumber);
     //   res.send("signup");
-    // res.redirect("/api/number/page");
+    // res.redirect("/number/page");
+	res.status(404).end();
   });
 
-
-  // Routing to signup
-  app.get("/api/search/", function(req, res) {
+  app.get("/search/", function(req, res) {
     res.render("search");
   })
 
-  // app.get("/api/signup/", function(req,res) {
-  //   res.render("signup");
-  // })
-
-  app.get("/api/signup/:id", function(req, res) {
+  app.get("/signup/:id/:address", function(req, res) {
     var title = req.params.id;
+    var address = req.params.address;
     // res.render("signup");
     res.render("signup", {
       title: title,
-      condition: true
+      condition: true,
+      address: address
     });
   })
 
-  app.get("/api/building/", function(req, res) {
+  app.get("/building/", function(req, res) {
     res.render("building");
   })
 
-  // Need to do validation on query for the number so no duplicates!!
-  // Creates new Tenant
-  app.post("/api/new", function(req, res) {
+  app.get("/tenant/dash/", isAuthenticated, function(req,res) {
+    var id = req.user.BuildingId;
+    var information = {
+      labels : [],
+      data : []
+    };
 
-    db.Tenant.findOne({
+    db.Issue.findAll({
       where: {
-        phone: req.body.phone
-      }
+        BuildingId: id
+      },
     }).then(data => {
-      console.log(data);
-      if (data === null) {
-        console.log("Book Data:");
-        console.log(req.body);
-        db.Tenant.create({
-          phone: req.body.phone,
-          email: req.body.email,
-          name: req.body.name,
-          apt: req.body.apt,
-          password: req.body.password,
-          BuildingId: req.body.BuildingId
-        });
-        res.send(true);
-      } else {
-        db.Tenant.update({
-          email: req.body.email,
-          name: req.body.name,
-          apt: req.body.apt,
-          password: req.body.password,
-          BuildingId: req.body.BuildingId
-        }, {
-          where: {
-            phone: req.body.phone
-          }
-        });
-        res.send(false);
+      // var information = {information:data};
+      if (data.length > 0) console.log(data[0].description);
+      if (data.length > 0) console.log(data[0].createdAt);
+
+      for (var i = 0; i < data.length; i++) {
+        var date = data[i].createdAt.toString().substring(4,9);
+        var time = data[i].createdAt.toString().substring(16,21);
+        var description = data[i].description+" "+date+" : "+time;
+        var quantity = data[i].quantity;
+        information.labels.push(description);
+        information.data.push(quantity);
+        console.log(information.labels[i]);
+        console.log(information.data[i]);
       }
+
+      res.render("tenant-dash", {quantity:information.data, information:information.labels, object:data});
+      // res.render("tenant-dash", information);
     });
   });
 
-
-  // Creates new building
-  app.post("/api/newBuilding", function(req, res) {
-    console.log("hello");
-    // db.Building.findOne({
-    // 	where: {
-    // 		phone: req.body.address
-    // 	}
-    // }).then(data => {
-    // 	if (data===null) {
-    // 	}
-    // });
+  app.get("/signin", (req, res) => {
+	if (req.user) {
+      res.redirect("/");
+    } else {
+      res.render("signin");
+    }
   });
 
+  app.get("/dashboard", isAuthenticated, (req, res) => {
+	res.json(req.user);
+  });
+
+  app.get("/signup/landlord", (req,res) => {
+    res.render("landlordsignup")
+  })
 
 };

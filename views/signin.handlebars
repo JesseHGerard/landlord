@@ -1,55 +1,30 @@
 <main role="main" class="container">
   <div class="jumbotron bg-info">
-    <h1 class="text-light">Welcome Tennant</h1>
+    <h1 class="text-light">Welcome!</h1>
     <div id="title" data-id="{{title}}"></div>
-    <p class="lead text-light">Let's get you started</p>
+    <p class="lead text-light">Please enter your user information below</p>
     <br>
     <br>
-    {{# if condition }}
-
-    <!-- condition was met -->
 
     <div class="row">
-      <form>
+      <form id="signin-form">
         <div class="form-group">
-          <label for="Name">Name</label>
-          <input class="form-control formValid" id="name" aria-describedby="NameHelp" placeholder="Enter Name">
+          <label for="email">Email</label>
+          <input class="form-control formValid" id="email" autocomplete="username email" placeholder="Email">
         </div>
         <div class="form-group">
-          <label for="Email">Email</label>
-          <input class="form-control formValid" id="email" placeholder="Email">
-        </div>
-        <div class="form-group">
-          <label for="Password">Password</label>
-          <input type="password" class="form-control formValid" id="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-          <label for="Apartment">Apartment</label>
-          <input class="form-control formValid" id="apt" placeholder="Apartment">
-        </div>
-        <div class="form-group">
-          <label for="Number">Phone Number</label>
-          <input class="form-control formValid" id="phone" placeholder="Number">
+          <label for="password">Password</label>
+          <input type="password" class="form-control formValid" autocomplete="current-password" id="password" placeholder="Password">
         </div>
         <div class="form-check">
+					<label class="form-check-label">
+						<input type="checkbox" class="form-check-input" id="is-landlord">
+						I'm a Landlord
+					</label>
         </div>
-        <button type="submit" class="btn btn-primary" id="newSign">Submit</button>
-        </form>
+				<button type="submit" class="btn btn-primary" id="sign-in-button">Sign In</button>
+       </form>
     </div>
-
-    {{else}}
-
-      condition not met
-
-    {{/if}}
-    <!-- row -->
-    <!-- Name -->
-    <!-- Email -->
-    <!-- Password -->
-    <!-- Building -->
-    <!-- Apartment -->
-    <!-- Phone Number -->
-
 
   </div>
 </main>

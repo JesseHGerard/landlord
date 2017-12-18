@@ -1,0 +1,93 @@
+<main role="main" class="container" id="container" style="margin-bottom: 40px;">
+	<div class="row">
+    <div class="col">
+		
+			<div class="row-fluid">
+				<h1>Welcome, {{user.name}}</h1>
+				<hr>
+				
+				<h3>File an Issue</h3>
+				<div class="form-group">
+					<label for="category">Category</label><br>
+					<select class="custom-select" id="category" style="width: 100%;">
+						<option></option>
+						<option>Roaches</option>
+						<option>Bed Bugs</option>
+						<option>Mice</option>
+						<option>Leak</option>
+						<option>Light Bulb</option>
+						<option>Stolen Mail</option>
+						<option>Noise</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="description">Description</label>
+					<textarea class="form-control" id="description" rows="3" style="resize: none;"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="quantity">Quantity</label>
+					<input type="number" class="form-control" id="quantity" min=1 value=1></input>
+				</div>
+				<button type="submit" class="btn btn-primary" id="create-issue">Submit</button>
+				<input type="hidden" id="tenantId" value="{{user.uuid}}">
+				<input type="hidden" id="buildingId" value="{{user.BuildingId}}">
+				<hr>
+			</div>
+			
+			<div class="row">
+				<!--<div class="col-3">
+					<span></span><select class="custom-select" id="filter-select">
+				</div>-->
+			
+				<div class="col">
+					<h3>Issues</h3>
+					<table class="table-bordered table-striped issues">
+						<thead>
+							<th>Class</th>
+							<th>Category</th>
+							<th>Description</th>
+							<th>Quantity</th>
+							<th>Apartment #</th>
+							<th>Time</th>
+						</thead>
+						<tbody>
+							{{#each issues}}
+								<tr>
+									<td>{{#if this.class}} {{this.class}} {{/if}}</td>
+									<td>{{#if this.category}} {{this.category}} {{/if}}</td>
+									<td>{{#if this.description}} {{this.description}} {{/if}}</td>
+									<td>{{this.quantity}}</td>
+									<td>{{#ifCond this.Tenant "&&" this.Tenant.apt}} {{this.Tenant.apt}} {{/ifCond}}</td>
+									<td>{{#date}} {{this.createdAt}} {{/date}}</td>
+								</tr>
+							{{/each}}
+						<tbody>
+					</table>
+				<div class="col-auto">
+			</div>
+    </div>
+  </div>
+</main>
+
+<script>
+	$("#create-issue").on('click', (event) => {
+		var cat = $("#category").val();
+		var desc = $("#description").val();
+		var quant = parseInt($("#quantity").val());
+		
+		var issue = {
+			TenantUuid: $("#tenantId").val(),
+			BuildingId: parseInt($("#buildingId").val()),
+		};
+		if (cat && cat.length > 0) issue.category = cat;
+		if (desc && desc.trim().length > 0) issue.description = desc.trim();
+		if (quant > 0) issue.quantity = quant; else issue.quantity = 1;
+		
+		if (issue.description || issue.category) {
+			$.post("/api/issue", issue).then(res => {
+				location.reload();
+			});
+		}
+	});
+</script>
+	

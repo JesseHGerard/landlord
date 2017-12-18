@@ -1,0 +1,77 @@
+<main role="main" class="container">
+  <div class="jumbotron bg-info">
+    <h1 class="text-light">Welcome Landlord</h1>
+    <div id="title" data-id="{{title}}"></div>
+    <div id="addressHolder" data-id="{{address}}"></div>
+
+    <p class="lead text-light">Let's get you started</p>
+    <br>
+    <!-- <h2>You are currently registering for: {/{address}}</h2> -->
+    <br>
+
+    <!-- phone, email, name, password, buildingId -->
+
+    <!-- <div class="jumbotron bg-warning">
+      <h2>Register your building here!</h2>
+      <hr class="my-4">
+      <p>Doublecheck that this is the right building</p>
+      <p>{/{address}}</p>
+      <form>
+        <div class="form-group">
+          <label for="landLordPhone">Landlord's phone number</label>
+          <input class="form-control formValid" id="landLordPhone" aria-describedby="NameHelp" placeholder="Enter Landlord's Phone Number">
+        </div>
+        <div class="form-group">
+          <label for="landLordEmail">Landlord's email</label>
+          <input class="form-control formValid" id="landLordEmail" aria-describedby="NameHelp" placeholder="Enter Landlord's Email">
+        </div>
+      </form>
+    </div> -->
+
+    <h2>Register Landlord form </h2>
+    <br>
+
+        <!-- phone, email, name, password, buildingId -->
+
+  <div class="row">
+    <form>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control formValid" id="name" aria-describedby="NameHelp" placeholder="Enter Name">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-control formValid" id="email" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control formValid" id="password" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input class="form-control formValid" id="phone" placeholder="Number">
+      </div>
+      <div class="form-group">
+        <label for="phone">Address</label>
+        <input class="form-control" id="addressLookUp" placeholder="Enter address here" autocomplete="off">
+      </div>
+      <div class="form-check">
+      </div>
+      <button type="submit" class="btn btn-primary" id="newLandLord">Submit</button>
+      </form>
+  </div>
+
+    <!-- row -->
+    <!-- Name -->
+    <!-- Email -->
+    <!-- Password -->
+    <!-- Building -->
+    <!-- Apartment -->
+    <!-- Phone Number -->
+
+
+  </div>
+</main>
+<link rel="stylesheet" href="../assets/css/jquery-ui.css">
+<script src="../assets/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../assets/js/autocomplete.js" type="text/javascript"></script>
