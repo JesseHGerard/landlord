@@ -51,7 +51,7 @@ $(document).ready(function() {
     console.log(buildingId);
 
     $.get("/api/register/tenant/"+ buildingId).done(function(data) {
-      window.location.assign("/api/signup/" + data.buildingNumber + "/" + data.address);
+      window.location.assign("/signup/" + data.buildingNumber + "/" + data.address);
     });
 
   });
@@ -101,41 +101,30 @@ $(document).ready(function() {
   });
 
   $("#yes").on("click", function(event) {
-    $.get("/api/search/").done(function(data) {
-      window.location.replace("/api/search/");
-    });
+    window.location.replace("/search");
   });
 
   $('.home').on("click", function(event) {
-    $.get("/").done(function(data) {
-      window.location.replace("/");
-    });
+     window.location.replace("/");
   });
 
   $("#no").on("click", function(event) {
-    $.get("/api/building/").done(function(data) {
-      window.location.replace("/api/building/");
-    });
+    window.location.replace("/building");
   });
 
   $("#searchNumber").on("click", function(event) {
     //event.preventDefault();
     var id = $("#numberInput").val().trim();
 
-    // $.get("/api/number/"+id);
-
     $.get("/api/number/" + id).done(function(data) {
       console.log(data);
 
       if (data.condition === true) {
         alert("Please enter a valid number, you entered " + data.buildingNumber);
-
-        // window.location.assign("/api/number/");
+        // window.location.assign("/number");
       } else {
-        window.location.assign("/api/signup/" + data.buildingNumber + "/" + data.address);
+        window.location.assign("/signup/" + data.buildingNumber + "/" + data.address);
       }
-
-      // window.location.assign("/api/number/");
     });
   });
 
@@ -146,66 +135,56 @@ $(document).ready(function() {
     // var buildingId = $("#registerTenant").data("id");
     console.log(blinker);
 
-    if (blinker==="on") {
-
+    if (blinker === "on") {
       var newUser = {
         phone: $("#phone").val().trim(),
         email: $("#email").val().trim(),
         name: $("#name").val().trim(),
         apt: $("#apt").val().trim(),
         password: $("#password").val().trim(),
-        BuildingId: $("#title").data("id")
+        BuildingId: $("#title").data("id"),
+		userType: 'tenant',
       };
 
       if (newUser.phone === "" || newUser.email === "" || newUser.name === "" || newUser.apt === "" || newUser.apt === "") {
         alert("Please fill in all of the fields");
       } else {
         // Send an AJAX POST-request
-        $.post("/api/new", newUser).done(function(data) {
-          if (data) {
-            alert("Created a new account!");
+        $.post("/api/tenant", newUser).done(function(data) {
+          if (data && (data === true || data === false)) {
+            alert((data ? "Created a new account" : "Updated your account"));
+			window.location.assign("/account-update/" + data);
           } else {
-            alert("Updated an account!");
-          }
-      window.location.assign("/account-update/" + data);
+			console.log(data);
+		  }
         });
       }
-    }
-
-    else {
-
+    } else {
       var newUser = {
         phone: $("#phone").val().trim(),
         email: $("#email").val().trim(),
         name: $("#name").val().trim(),
         apt: $("#apt").val().trim(),
         password: $("#password").val().trim(),
+		userType: 'tenant',
         address: $("#addressHolder").data("id"),
         landlordphone: $("#landLordPhone").val().trim(),
-        landlordemail: $("#landLordEmail").val().trim()
+        landlordemail: $("#landLordEmail").val().trim(),
       };
 
       if (newUser.phone === "" || newUser.email === "" || newUser.name === "" || newUser.apt === "" || newUser.apt === "" || newUser.landlordemail === "" || newUser.landlordphone === "") {
         alert("Please fill in all of the fields");
       } else {
-
         console.log(newUser.landlordphone);
         // Send an AJAX POST-request
-        $.post("/api/newboth", newUser).done(function(data) {
+        $.post("/api/building-tenant", newUser).done(function(data) {
           if (data) {
             alert("Created a new account!");
-          } else {
-            alert("Updated an account!");
+			window.location.assign("/account-update/true");
           }
-      window.location.assign("/account-update/" + data);
         });
       }
-
     }
-
-    // Creates a newUser object
-
-
   });
 
 
@@ -221,7 +200,7 @@ $(document).ready(function() {
       alert("Please fill in all the fields");
     } else {
       console.log("hello");
-      $.post("/api/newBuilding", newBuilding).done(function(data) {
+      $.post("/api/building", newBuilding).done(function(data) {
         alert(data);
       });
     }

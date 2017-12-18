@@ -1,12 +1,17 @@
-<main role="main" class="container">
+<div role="main" class="container">
   <div class="jumbotron bg-success">
-    <h1 class="text-light">Congrats</h1>
-    <div id="title" data-id="{{title}}"></div>
+    <h1 class="text-light">Success</h1>
+    <div id="title"></div>
     <p class="lead text-light">Now login to access your dashboard</p>
     <br>
     <br>
     <div class="row">
-      You account has been updated!!
+	
+	  {{#if this.created}}
+        Your account has been created!
+	  {{else}}
+		Your account has been updated!
+	  {{/if}}
     </div>
     <!-- row -->
     <!-- Name -->
@@ -18,4 +23,4 @@
 
 
   </div>
-</main>
+</div>

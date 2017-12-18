@@ -24,8 +24,8 @@ const runServer = () => {
 	app.set("view engine", "handlebars");
 
 	require('./controllers/api-controller')(app);
+	require('./controllers/web-controller')(app);
 	require('./controllers/sms-controller')(app);
-	require('./controllers/handlebars-controller')(app);
 
 	db.sequelize.sync({logging: false}).then((results) => {
 		console.log("Synced database models:" + results.modelManager.models.map((val) => {return "\n  " + val.name;}).join("") + "\n");
@@ -34,9 +34,9 @@ const runServer = () => {
 		});
 	}).catch(error => console.log(error));
 };
+//runServer();
 
+checkEnv().then(resolve => {
+ 	runServer();
+});
 
-checkEnv()
-.then(resolve => {
-	runServer();
-}).catch(error => console.log(error));
