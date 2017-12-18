@@ -114,16 +114,18 @@ module.exports = function(app) {
     res.render("search");
   })
 
-  app.get("/signup/:id/:address", function(req, res) {
-    var title = req.params.id;
-    var address = req.params.address;
-    // res.render("signup");
-    res.render("signup", {
-      title: title,
-      condition: true,
-      address: address
-    });
-  })
+  app.get("/signup/:address", function(req, res) {
+
+    db.Building.findOne({where: {address: req.params.address}})
+      .then(data => {
+        console.log(data);
+        res.render("signup", {
+          title: data.dataValues.id,
+          condition: true,
+          address: data.dataValues.address
+        });
+      });
+  });
 
   app.get("/building/", function(req, res) {
     res.render("building");
