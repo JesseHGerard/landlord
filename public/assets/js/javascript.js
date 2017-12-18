@@ -5,51 +5,7 @@ $(document).ready(function() {
 
     window.location.replace("/signup/landlord");
 
-  })
-
-  // chartjs //////////////////////////
-
-  /*$.get("/tenant/dash/").done(function(data) {
-
-    // console.log(data);
-    // console.log(data.information);
-    // BuildingId: $("#info").data("quantity");
-    var labels = $("#info").data("labels");
-    var labelsArray = labels.split(",");
-    var data = $("#info").data("quantity");
-    var dataArray = data.split(",");
-    console.log(labelsArray);
-
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-            // labels: ["January", "February", "March", "April", "May", "June", "July"],
-            labels: labelsArray,
-            datasets: [{
-                label: "My First dataset",
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                // data: [0, 10, 5, 2, 20, 30, 45],
-                data: dataArray,
-            }],
-            // {
-            //   label: "My Second dataset",
-            //   // backgroundColor: 'rgb(255, 99, 132)',
-            //   borderColor: 'rgb(255, 99, 132)',
-            //   data: [10, 0, 2, 5, 30, 20, 10],
-            // }]
-        },
-
-        // Configuration options go here
-        options: {}
-    });
-  });*/
-
-  // chartjs ///////////////////////
+  });
 
   $("#newIssue").on("click", function(event) {
     event.preventDefault();
@@ -60,7 +16,7 @@ $(document).ready(function() {
     //   window.location.reload();
     // })
 
-  })
+  });
 
   $("#registerTenant").on("click", function(event) {
     event.preventDefault();

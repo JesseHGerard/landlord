@@ -127,7 +127,7 @@ module.exports = function(app) {
   })
 
   app.get("/tenant/dash/", isAuthenticated, function(req,res) {
-    var id = req.user.BuildingId;
+    var id = 1;
     var information = {
       labels : [],
       data : []
@@ -167,7 +167,60 @@ module.exports = function(app) {
   });
 
   app.get("/dashboard", isAuthenticated, (req, res) => {
-	res.json(req.user);
+    // chartjs
+
+    // var id = req.user.BuildingId;
+    var id = '4';
+    var information = {
+      labels : [],
+      data : [],
+      donutLabels : [],
+      donutData: []
+    };
+
+    db.Issue.findAll({
+      where: {
+        BuildingId: '4'
+      },
+    }).then(data => {
+      // var information = {information:data};
+      if (data.length > 0) console.log(data[0].category);
+      if (data.length > 0) console.log(data[0].createdAt);
+      console.log(data);
+
+        for (var i = 0; i < data.length; i++) {
+          var date = data[i].createdAt.toString().substring(4,9);
+          var time = data[i].createdAt.toString().substring(16,21);
+          var category = data[i].category+" "+date+" : "+time;
+          var quantity = data[i].quantity;
+
+
+          information.labels.push(category);
+          information.data.push(quantity);
+          console.log(information.labels[i]);
+          console.log(information.data[i]);
+        }
+
+        // for (var a = 0; a < data.length; a++) {
+        //
+        //   var cat = data[a].category;
+        //
+        //   for (var b = 0; b < data.length; b++) {
+        //     if  (cat === data[b].category) {
+        //       information.donutLabels.push(data[b].category);
+        //       information.donutData.push(data[b].quantity)
+        //     }
+        //   }
+        // }
+
+
+
+
+      res.render("tenant-dash", {quantity:information.data, information:information.labels, object:data});
+
+	// res.json(req.user);
+  // console.log(req.user.BuildingId);
+    });
   });
 
   app.get("/signup/landlord", (req,res) => {
