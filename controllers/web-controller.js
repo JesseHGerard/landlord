@@ -183,7 +183,7 @@ module.exports = function(app) {
 
     db.Issue.findAll({
       where: {
-        BuildingId: '4'
+        BuildingId: id
       },
     }).then(data => {
       // var information = {information:data};
