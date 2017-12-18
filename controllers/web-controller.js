@@ -1,5 +1,6 @@
 var db = require("../models");
 var passport = require("../config/passport");
+var moment = require("moment");
 
 var isAuthenticated = require("../config/middleware/isAuthenticated");
 
@@ -13,8 +14,10 @@ module.exports = function(app) {
 			where: {
 				BuildingId: req.user.BuildingId
 			},
+			include: [db.Tenant, db.Building],
 			order: [['createdAt', 'DESC']],
 		}).then(issues => {
+			// console.log(JSON.stringify(issues, null, 2));
 			res.render("dashboard", {user: req.user, issues: issues});
 		});
 	} else res.render("index");

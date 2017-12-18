@@ -5,10 +5,7 @@ table {
 	box-sizing: border-box;
 }
 
-th {
-	text-align: center;
-}
-
 td, th {
 	padding: 5px;
+	text-align: center;
 }
