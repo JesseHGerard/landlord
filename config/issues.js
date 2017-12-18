@@ -8,7 +8,7 @@ const issues = {
     mice: ['mouse', 'mice', 'mose', 'mous', 'mic']
   },
   infrastructure: {
-    leaks: ['leak', 'leaks', 'leek', 'leeks', 'lek', 'leks', 'lake', 'lakes'],
+    leaks: ['leak', 'leaks', 'leek', 'leeks', 'lek', 'leks', 'lake', 'lakes', 'leaking', 'leaky'],
     bulbs: ['bulb burned-out', 'bulbs burned-out', 'bulb', 'blubs', 'bolb', 'bolbs', 'light', 'light-bulb', 'lights']
   },
   people: {
@@ -21,7 +21,7 @@ const issues = {
       for (issue in this[category]) {
         for (keyword of this[category][issue]) {
           if (word === keyword) {
-            result = {'issue': issue, 'category': issue};
+            result = {'issue': issue, 'category': category};
           };
         };
       };
@@ -30,7 +30,7 @@ const issues = {
   },
   grammarize(issue, qty) {
     if (qty > 1) {
-      return 
+      return
     }
   }
 };

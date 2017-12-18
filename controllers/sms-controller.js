@@ -7,14 +7,6 @@ const MessagingResponse = require('twilio').twiml.MessagingResponse;
 // require the Twilio module and create a REST client
 const client = require('twilio')(process.env.twilioSid, process.env.twiloAuthToken);
 
-const replySms = (res, message) => {
-	const twiml = new MessagingResponse();
-
-	twiml.message('The Robots are coming! Head for the hills!');
-
-	res.writeHead(200, {'Content-Type': 'text/xml'});
-	res.end(twiml.toString());
-};
 
 // store user info in progres of being setup
 const newUserSetUp = {};
@@ -46,6 +38,7 @@ module.exports = function(app) {
 
 	// receive sms from twilio webhook
 	app.post('/sms', (req, res) => {
+		console.log('req', req.body);
 		const userFrom = req.body.From;
 
 		// search db for sms sender phone number
@@ -60,7 +53,8 @@ module.exports = function(app) {
 					// create new tenant
 					db.Tenant.create({
 						phone: userFrom,
-						BuildingId: building.id
+						BuildingId: building.id,
+						userType: 'tenant'
 					}).then(result => {
 						// add user to newUserSetUp, and ask name
 						newUserSetUp[userFrom] = {phone: userFrom, nameStatus: false};
@@ -89,7 +83,7 @@ module.exports = function(app) {
 						newUserSetUp[userFrom].aptStatus = false;
 						// send appartment number request
 						const twiml = new MessagingResponse();
-						twiml.message(`Thanks ${req.body.Body} \n2. Which apartment are you in?`);
+						twiml.message(`Thanks ${req.body.Body} \n2. What is your apparment number?`);
 						res.writeHead(200, {'Content-Type': 'text/xml'});
 						res.end(twiml.toString());
 					});
@@ -118,11 +112,13 @@ module.exports = function(app) {
 				};
 			}
 			// if user is in database and is not in newUserSetUp
+
 			else if (data !== null && newUserSetUp[userFrom] === undefined) {
 				// process issue
 				let messageArray = req.body.Body.trim().split(' '), qty, issue, category;
+				console.log(messageArray);
 				for (item of messageArray) {
-					let search = issues.search('item');
+					let search = issues.search(item);
 					if (search) {
 						issue = search.issue;
 						category = search.category;
@@ -140,14 +136,26 @@ module.exports = function(app) {
 					description: issue,
 					quantity: qty,
 					category: category,
-					TenantId: data.id,
+					TenantUuid: data.uuid,
 					BuildingId: data.BuildingId
 				}).then(issueRes => {
-					// add qty response here
+					db.Issue.sum('quantity', {where: {description: issue}}).then(sum => {
+						let issueCondition;
+						if (catagory === 'message') {
+							issueCondition = 'message';
+						} else {
+							issueContition = issue;
+						};
+
+						const twiml = new MessagingResponse();
+						twiml.message(`Thanks for submitting your issue. There have been ${sum} ${issueCondition} reported in the last day`);
+						res.writeHead(200, {'Content-Type': 'text/xml'});
+						res.end(twiml.toString());
+					});
 
 				});
 			};
 
-		});
+		}).catch(error => console.log(error));
 	});
 };

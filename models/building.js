@@ -3,9 +3,9 @@ module.exports = function(sequelize, DataTypes) {
 		phone: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			validate: {
-				isMobilePhone: 'any' // I think this is how it works?
-			},
+			// validate: {
+			// 	isMobilePhone: 'any' // I think this is how it works?
+			// },
 		},
 		address: {
 			type: DataTypes.STRING,
