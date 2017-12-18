@@ -1,11 +1,21 @@
-table {
+.issues {
 	width: 100%;
+	margin: 0px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.filtering-div {
+	border: solid 1px #e9ecef;
+	padding: 10px;
+	margin: 0px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
 td, th {
-	padding: 5px;
+	padding: 10px;
 	text-align: center;
 }

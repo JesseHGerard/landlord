@@ -169,6 +169,7 @@ module.exports = function(app) {
     }
   });
 
+
   app.get("/dashboard", isAuthenticated, (req, res) => {
     // chartjs
 
@@ -224,6 +225,10 @@ module.exports = function(app) {
 	// res.json(req.user);
   // console.log(req.user.BuildingId);
     });
+
+  app.get("/userData", isAuthenticated, (req, res) => {
+	res.json(req.user);
+
   });
 
   app.get("/signup/landlord", (req,res) => {

@@ -9,7 +9,7 @@
 				<h3>File an Issue</h3>
 				<div class="form-group">
 					<label for="category">Category</label><br>
-					<select class="custom-select" id="category" style="width: 100%;">
+					<select class="custom-select form-control" id="category" style="width: 100%;">
 						<option></option>
 						<option>Roaches</option>
 						<option>Bed Bugs</option>
@@ -34,24 +34,38 @@
 				<hr>
 			</div>
 			
-			<div class="row">
-				<!--<div class="col-3">
-					<span></span><select class="custom-select" id="filter-select">
-				</div>-->
+			<div class="row" id="issue-row">
+				<div class="col-3">
+					<h3>Issue Filtering</h3>
+					<div class="filtering-div">
+						<div class="form-group">
+							<label for="filter-select">Filter:</label>
+							<select class="custom-select" id="filter-select">
+								<option value="">(no filter)</option>
+								<option>Class</option>
+								<option>Category</option>
+								<option>Reporter</option>
+								<option>Time</option>
+							</select>
+							<button class="btn btn-primary" id="filter-button">Apply</button>
+						</div>
+						<div class="form-group" id="filter-options"></div>
+					</div>
+				</div>
 			
 				<div class="col">
-					<h3>Issues</h3>
+					<h3>Issues <span id="num-issues"></span></h3>
 					<table class="table-bordered table-striped issues">
 						<thead>
 							<th>Class</th>
 							<th>Category</th>
 							<th>Description</th>
 							<th>Quantity</th>
-							<th>Apartment #</th>
+							<th>Apartment</th>
 							<th>Time</th>
 						</thead>
-						<tbody>
-							{{#each issues}}
+						<tbody id="issue-table-body">
+							<!--{{#each issues}}
 								<tr>
 									<td>{{#if this.class}} {{this.class}} {{/if}}</td>
 									<td>{{#if this.category}} {{this.category}} {{/if}}</td>
@@ -60,10 +74,10 @@
 									<td>{{#ifCond this.Tenant "&&" this.Tenant.apt}} {{this.Tenant.apt}} {{/ifCond}}</td>
 									<td>{{#date}} {{this.createdAt}} {{/date}}</td>
 								</tr>
-							{{/each}}
+							{{/each}}-->
 						<tbody>
 					</table>
-				<div class="col-auto">
+				</div>
 			</div>
     </div>
   </div>
@@ -89,5 +103,77 @@
 			});
 		}
 	});
+	
+	$("#filter-button").on('click', event => {
+		switch ($("#filter-select").val()) {
+		case 'Class':
+			return $.get("/api/issues/class/" + $("#filter-class").val()).then(issues => {
+				fillIssueTable(issues);
+			});
+		case 'Category':
+			return $.get("/api/issues/category/" + $("#filter-category").val()).then(issues => {
+				fillIssueTable(issues);
+			});
+		case 'Reporter':
+			return $.get("/api/issues/reporter/" + $("#filter-reporter").val()).then(issues => {
+				fillIssueTable(issues);
+			});
+		case 'Time':
+			return $.get("/api/issues/time/" + $("#filter-time").val()).then(issues => {
+				fillIssueTable(issues);
+			});
+		default:
+			return $.get("/api/issues").then(issues => {
+				fillIssueTable(issues);
+			});
+		}
+	});
+	
+	$("#filter-select").on('change', event => {
+		$.get("/api/building").then(building => {
+			switch ($("#filter-select").val()) {
+			case 'Class':
+				filterControlHTML = "<hr><label for='filter-class'>Class:</label>\n<select id='filter-class' class='custom-select'><option value='null'>(no class)</option><option>Pests</option><option>Infrastructure</option><option>People</option></select>";
+				break;
+			case 'Category':
+				filterControlHTML = "<hr><label for='filter-category'>Category:</label>\n<select id='filter-category' class='custom-select'><option value='null'>(no category)</option><option>Roaches</option><option>Bed Bugs</option><option>Mice</option><option>Leak</option><option>Light Bulb</option><option>Stolen Mail</option><option>Noise</option></select>";
+				break;
+			case 'Reporter':
+				filterControlHTML = "<hr><label for='filter-reporter'>Reported By:</label>\n<select id='filter-reporter' class='custom-select'><option value='null'>(unknown reporter)</option>";
+				for (var i = 0; i < building.Tenants.length; i++) {
+					filterControlHTML += "<option value=" + building.Tenants[i].uuid + ">" + building.Tenants[i].name + "</option>"
+				}
+				filterControlHTML += "</select>";
+				break;
+			case 'Time':
+				filterControlHTML = "<hr><label for='filter-time'>Within the last:</label>\n<select id='filter-time' class='custom-select'><option>Hour</option><option>Day</option><option>Week</option><option>Month</option><option>Year</option></select>";
+				break;
+			default:
+				break;
+			}
+			$("#filter-options").html(filterControlHTML);
+		});
+	});
+	
+	$.get("/api/issues").then(issues => {
+		fillIssueTable(issues);
+	});
+	
+	function fillIssueTable(issues) {
+		$("#issue-table-body").empty();
+		$("#num-issues").empty().text("(" + issues.length + ")");
+	
+		for (var i = 0; i < issues.length; i++) {
+			$("#issue-table-body").append($("<tr>")
+				.append($("<td>").text(issues[i].class || ""))
+				.append($("<td>").text(issues[i].category || ""))
+				.append($("<td>").text(issues[i].description || ""))
+				.append($("<td>").text(issues[i].quantity))
+				.append($("<td>").text((issues[i].Tenant && issues[i].Tenant.apt) ? issues[i].Tenant.apt : ""))
+				.append($("<td>").text(moment(new Date(issues[i].createdAt).toISOString()).format("M/D/YYYY h:mm a")))
+			);
+		}
+	}
+	
 </script>
 	
