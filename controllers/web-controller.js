@@ -50,7 +50,7 @@ module.exports = function(app) {
       if (data === null) { // Record doesn't exist
 		// testing
 		// res.render("options", {title:"rendertest", condition:true});
-		  
+
         res.json({
           condition: false,
           address: addressGiven
@@ -114,5 +114,44 @@ module.exports = function(app) {
   app.get("/building/", function(req, res) {
     res.render("building");
   })
+
+  app.get("/tenant/dash/:id", function(req,res) {
+
+    var id = req.params.id;
+
+    var information = {
+      labels : [],
+      data : []
+    };
+
+    db.Issue.findAll({
+      where: {
+        BuildingId:id
+      }
+    }).then(data => {
+
+      // var information = {
+      //   information:data
+      // };
+      //
+      console.log(data[0].description);
+      console.log(data[0].createdAt);
+
+      for (var i = 0; i < data.length; i++) {
+        var date = data[i].createdAt.toString().substring(4,9);
+        var time = data[i].createdAt.toString().substring(16,21);
+        var description = data[i].description+" "+date+" : "+time;
+        var quantity = data[i].quantity;
+        information.labels.push(description);
+        information.data.push(quantity);
+        console.log(information.labels[i]);
+        console.log(information.data[i]);
+      }
+
+      res.render("tenant-dash", {quantity:information.data, information:information.labels, object:data});
+      // res.render("tenant-dash", information);
+    });
+  });
+
 
 };
