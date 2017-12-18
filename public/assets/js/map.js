@@ -123,8 +123,9 @@ $(document).ready(() => {
 
     } else if ($('#search-button').text() === 'sign up') {
       $.ajax({
-        method: ''
-      })
+        method: 'GET',
+        url: `/signup/${$('#search-field').val()}`
+      }).then(res => window.location.replace(`/signup/${$('#search-field').val()}`));
     }
   });
 
