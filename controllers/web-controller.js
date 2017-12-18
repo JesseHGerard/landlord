@@ -19,6 +19,42 @@ module.exports = function(app) {
       attributes: ['address']
     }).then(data => res.json(data));
   });
+  
+  app.get("/tenant/dash/:id", function(req,res) {
+
+    var id = req.params.id;
+
+    var information = {
+      labels : [],
+      data : []
+    };
+
+    db.Issue.findAll({
+      where: {
+        BuildingId:id
+      }
+    }).then(data => {
+
+      // var information = {
+      //   information:data
+      // };
+      //
+      console.log(data[0].description);
+      console.log(data[0].createdAt);
+
+      for (var i = 0; i < data.length; i++) {
+        var description = data[i].description+" "+data[i].createdAt;
+        var quantity = data[i].quantity;
+        information.labels.push(description);
+        information.data.push(quantity);
+        console.log(information.labels[i]);
+        console.log(information.data[i]);
+      }
+
+      res.render("tenant-dash", {quantity:information.data, information:information.labels});
+      // res.render("tenant-dash", information);
+    });
+  });
 
   app.get("/options/:id/:bool/:building?", function(req,res) {
     var addressChange = req.params.id;

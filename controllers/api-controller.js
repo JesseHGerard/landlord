@@ -172,6 +172,7 @@ module.exports = function(app) {
 		});
 	});
 	
+	// I guess this is incomplete?
 	app.get("/api/register/building/:id", function(req, res) {
 		res.json({address: req.params.id});
 	});
