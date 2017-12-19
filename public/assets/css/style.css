@@ -19,3 +19,7 @@ td, th {
 	padding: 10px;
 	text-align: center;
 }
+
+.place-red::placeholder {
+	color: red;
+}

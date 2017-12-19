@@ -1,33 +1,33 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6" style="margin: auto">
-      <form class="form-group">
+      <form class="phone-signup">
         <div class="form-group">
           <label>Phone Number</label>
-          <h6>{{phone}}</h6>
+          <h6 id="phone">{{phone}}</h6>
         </div>
         <div class="form-group">
           <label>Address</label>
           <h6>{{address}}</h6>
         <div class="form-group">
-          <label>Name</label>
-          <input type="text" class="form-control" value="{{name}}"></input>
+          <label >Name</label>
+          <input id="name" type="text" class="form-control place-red" value="{{name}}"></input>
         </div>
-        <div class="form-group"
+        <div class="form-group">
           <label>Apartment Number</label>
-          <input type="text" class="form-control" value="{{apt}}"></input>
+          <input id="apt" type="text" class="form-control place-red" value="{{apt}}"></input>
         </div>
-        <div class="form-group"
+        <div class="form-group">
           <label>Password</label>
-          <input type="password" class="form-control" ></input>
+          <input id="password" type="password" class="form-control place-red" ></input>
         </div>
         <div class="form-group">
           <label>Confirm Password</label>
-          <input type="password" class="form-control"></input>
+          <input id="password-confirm" type="password" class="form-control place-red"></input>
         </div>
         <div class="form-group"
           <label>Email Address</label>
-          <input type="email" class="form-control"></input>
+          <input id="email" type="email" class="form-control place-red"></input>
         </div>
 
 
@@ -39,5 +39,54 @@
 </div>
 
 <script>
+  $('#update').on('click', (event) => {
+    event.preventDefault();
+    let go = true;
+    if ($('#name').val() === '') {
+      $('#name').attr('placeholder', `What's your name?`);
+      go = false;
+    };
+    if ($('#apt').val() === '') {
+      $('#apt').attr('placeholder', `What's your apartment number?`);
+      go = false;
+    };
+    if ($('#password').val() === '') {
+      $('#password').attr('placeholder', `Create a new password`);
+      go = false;
+    };
+    if ( $('#password').val() !== $('#password-confirm').val() ) {
+      $('#password-confirm').val('').attr('placeholder', `Your passwords don't match`);
+      go = false;
+    };
+    if ($('#email').val() === '') {
+      $('#email').attr('placeholder', `What's your email address?`);
+      go = false;
+    };
+    if (go) {
+      $.ajax({
+        method: 'PUT',
+        url: '/api/phone-signup',
+        data: {
+          name: $('#name').val(),
+          apt: $('#apt').val(),
+          password: $('#password').val(),
+          email: $('#email').val(),
+          phone: $('#phone').text()
+        }
+      }).then(res => {
+        $.ajax({
+          method: 'POST',
+          url: '/api/login',
+          data: {
+            password: $('#password').val(),
+            email: $('#email').val(),
+            userType: 'tenant'
+          }
+        }).then(res => {
+            location.replace(res);
+        })
+      })
+    };
+  });
 
 </script>
