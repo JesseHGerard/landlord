@@ -114,7 +114,7 @@ module.exports = function(app) {
 
 			else if (data !== null && newUserSetUp[userFrom] === undefined) {
 				// process issue
-				let messageArray = req.body.Body.trim().split(' '), qty, issue, category, issueClass;
+				let messageArray = req.body.Body.trim().split(' '), qty, description, category, issueClass;
 				console.log(messageArray);
 				for (item of messageArray) {
 					let search = issues.search(item);
@@ -128,13 +128,13 @@ module.exports = function(app) {
 				// add issue to db
 				if (!qty) qty = 1;
 				if (!issue) {
-					issue = req.body.Body;
+					description = req.body.Body.trim();
 					category = 'message';
 					issueClass = 'message';
 				};
 
 				db.Issue.create({
-					description: req.body.Body.trim(),
+					description: description,
 					quantity: qty,
 					category: category,
 					class: issueClass,
@@ -142,12 +142,12 @@ module.exports = function(app) {
 					BuildingId: data.BuildingId
 				}).then(issueRes => {
 					// respond with issue summary
-					db.Issue.sum('quantity', {where: {description: issue}}).then(sum => {
+					db.Issue.sum('quantity', {where: {category: category}}).then(sum => {
 						let issueCondition;
 						if (category === 'message') {
 							issueCondition = 'message';
 						} else {
-							issueContition = issue;
+							issueContition = category;
 						};
 
 						const twiml = new MessagingResponse();

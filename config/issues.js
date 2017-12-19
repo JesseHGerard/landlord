@@ -27,11 +27,6 @@ const issues = {
       };
     };
     return result;
-  },
-  grammarize(issue, qty) {
-    if (qty > 1) {
-      return
-    }
   }
 };
 
