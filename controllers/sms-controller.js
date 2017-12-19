@@ -98,14 +98,14 @@ module.exports = function(app) {
 						delete newUserSetUp[userFrom];
 						// send setup success sms
 						const twiml = new MessagingResponse();
-						twiml.message(`Setup complete! You can now text all your building issues to this number. To make changes to your account, please visit ${process.env.siteUrl}`);
+						twiml.message(`Setup complete! You can now text all your building issues to this number. To make changes to your account, please visit ${process.env.siteUrl}/${data.uuid}`);
 						res.writeHead(200, {'Content-Type': 'text/xml'});
 						res.end(twiml.toString());
 					});
 				} else {
 					// error message
 					const twiml = new MessagingResponse();
-					twiml.message(`There was an error setting up your account. Please go to ${process.env.siteUrl}/${data.uuid} to finish setup.`);
+					twiml.message(`There was an error setting up your account. Please go to ${process.env.siteUrl} to finish setup.`);
 					res.writeHead(200, {'Content-Type': 'text/xml'});
 					res.end(twiml.toString());
 				};
