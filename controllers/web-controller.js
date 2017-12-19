@@ -149,6 +149,7 @@ module.exports = function(app) {
     }
 
     db.Issue.findAll({
+      attributes: ['description', 'quantity', 'category', 'class', 'createdAt'],
       where: {
         BuildingId: id
       },

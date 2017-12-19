@@ -118,7 +118,7 @@ $(document).ready(function() {
         alert("Please enter a valid number, you entered " + data.buildingNumber);
         // window.location.assign("/number");
       } else {
-        window.location.assign("/signup/" + data.buildingNumber + "/" + data.address);
+        window.location.assign("/signup/" + data.address);
       }
     });
   });
