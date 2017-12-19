@@ -27,3 +27,6 @@ td, th {
 .noted-issue:nth-child(odd) > * {
 	background-color: #82e070;
 }
+.place-red::placeholder {
+	color: red;
+}

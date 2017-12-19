@@ -159,7 +159,7 @@ $(document).ready(function() {
       }
     } else {
       var newUser = {
-        phone: $("#phone").val().trim(),
+        phone: "+1"+$("#phone").val().trim(),
         email: $("#email").val().trim(),
         name: $("#name").val().trim(),
         apt: $("#apt").val().trim(),

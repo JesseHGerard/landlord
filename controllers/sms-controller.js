@@ -98,7 +98,7 @@ module.exports = function(app) {
 						delete newUserSetUp[userFrom];
 						// send setup success sms
 						const twiml = new MessagingResponse();
-						twiml.message(`Setup complete! You can now text all your building issues to this number. To make changes to your account, please visit ${process.env.siteUrl}`);
+						twiml.message(`Setup complete! You can now text all your building issues to this number. To make changes to your account, please visit ${process.env.siteUrl}/phone-signup/${data.uuid}`);
 						res.writeHead(200, {'Content-Type': 'text/xml'});
 						res.end(twiml.toString());
 					});

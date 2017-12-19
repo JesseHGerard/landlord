@@ -5,6 +5,19 @@ var moment = require('moment');
 
 module.exports = function(app) {
 
+
+	app.put('/api/phone-signup', (req, res) => {
+		db.Tenant.update({
+				name: req.body.name,
+				apt: req.body.apt,
+				password: req.body.password,
+				email: req.body.email
+			},
+			{where: {phone: req.body.phone}})
+		.then(data => res.end());
+	});
+
+
 	app.post("/api/login", passport.authenticate("local"), (req, res) => {
 		res.json("/"); // To-do: change this to reflect actual urls
 	});
@@ -139,10 +152,10 @@ module.exports = function(app) {
 			res.json(err);
 		});
 	});
-	
+
 	app.get("/api/building/", (req, res) => {
 		if (!req.user) return res.status(401).end(); // 401 means unauthorized
-		
+
 		var include = [db.Tenant, db.Landlord, db.Issue];
 		db.Building.findOne({where: {id: req.user.BuildingId}, include: include}).then(data => {
 			res.json(data);
@@ -192,10 +205,10 @@ module.exports = function(app) {
 			res.json(err);
 		});
 	});
-	
+
 	app.get("/api/issues", (req, res) => {
 		if (!req.user) return res.status(401).end(); // 401 means unauthorized
-		
+
 		db.Issue.findAll({
 			where: {
 				BuildingId: req.user.BuildingId
@@ -209,10 +222,10 @@ module.exports = function(app) {
 			res.json(err);
 		});
 	});
-	
+
 	app.get("/api/issues/class/:class", (req, res) => {
 		if (!req.user) return res.status(401).end(); // 401 means unauthorized
-		
+
 		db.Issue.findAll({
 			where: {
 				BuildingId: req.user.BuildingId,
@@ -227,10 +240,10 @@ module.exports = function(app) {
 			res.json(err);
 		});
 	});
-	
+
 	app.get("/api/issues/category/:category", (req, res) => {
 		if (!req.user) return res.status(401).end(); // 401 means unauthorized
-		
+
 		db.Issue.findAll({
 			where: {
 				BuildingId: req.user.BuildingId,
@@ -245,10 +258,10 @@ module.exports = function(app) {
 			res.json(err);
 		});
 	});
-	
+
 	app.get("/api/issues/reporter/:tenantUuid", (req, res) => {
 		if (!req.user) return res.status(401).end(); // 401 means unauthorized
-		
+
 		db.Issue.findAll({
 			where: {
 				BuildingId: req.user.BuildingId,
@@ -263,10 +276,10 @@ module.exports = function(app) {
 			res.json(err);
 		});
 	});
-	
+
 	app.get("/api/issues/time/:window", (req, res) => {
 		if (!req.user) return res.status(401).end(); // 401 means unauthorized
-		
+
 		var oldest;
 		switch(req.params.window) {
 		case 'Hour':
@@ -288,7 +301,7 @@ module.exports = function(app) {
 			oldest = new Date();
 			break;
 		}
-		
+
 		db.Issue.findAll({
 			where: {
 				BuildingId: req.user.BuildingId,
