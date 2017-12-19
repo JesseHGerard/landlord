@@ -114,13 +114,14 @@ module.exports = function(app) {
 
 			else if (data !== null && newUserSetUp[userFrom] === undefined) {
 				// process issue
-				let messageArray = req.body.Body.trim().split(' '), qty, description, category, issueClass;
+				let description = req.body.Body.trim();
+				let messageArray = description.split(' '), qty, category, issueClass;
 				console.log(messageArray);
 				for (item of messageArray) {
 					let search = issues.search(item);
 					if (search) {
-						category = search.issue;
-						issueClass = search.category;
+						category = search.category;
+						issueClass = search.class;
 					} else if (parseInt(item)) {
 						qty = parseInt(item);
 					};
@@ -128,7 +129,7 @@ module.exports = function(app) {
 				// add issue to db
 				if (!qty) qty = 1;
 				if (!issue) {
-					description = req.body.Body.trim();
+
 					category = 'message';
 					issueClass = 'message';
 				};
