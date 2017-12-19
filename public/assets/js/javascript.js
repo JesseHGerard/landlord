@@ -2,9 +2,9 @@ $(document).ready(function() {
   //
   $("#registerLandLord").on("click", function(event) {
     event.preventDefault();
-	
+
 	var adrs = $("#search-field").val().trim();
-	
+
     window.location.replace("/signup/landlord/form/" + adrs);
 
   });
@@ -113,7 +113,7 @@ $(document).ready(function() {
     //event.preventDefault();
     var id = $("#numberInput").val().trim();
 
-    $.get("/api/number/" + id).done(function(data) {
+    $.get("/api/number/"+"+1"+id).done(function(data) {
       console.log(data);
 
       if (data.condition === true) {
