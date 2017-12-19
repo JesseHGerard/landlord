@@ -65,6 +65,12 @@
 							<button class="btn btn-primary" id="filter-button">Apply</button>
 						</div>
 						<div class="form-group" id="filter-options"></div>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="checkbox" class="form-check-input" id="show-checked">
+								Show checked issues
+							</label>
+						</div>
 					</div>
 				</div>
 				<div class="col">
@@ -237,8 +243,11 @@
 	function fillIssueTable(issues) {
 		$("#issue-table-body").empty();
 		$("#num-issues").empty().text("(" + issues.length + ")");
-
+		
+		var showNoted = $("#show-checked").is(":checked");
+		
 		for (var i = 0; i < issues.length; i++) {
+			if (!showNoted && issues[i].noted) {continue;}
 			var row = $("<tr>")
 				.append($("<td>").text(issues[i].class || ""))
 				.append($("<td>").text(issues[i].category || ""))
