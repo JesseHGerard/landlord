@@ -105,7 +105,7 @@ module.exports = function(app) {
 				} else {
 					// error message
 					const twiml = new MessagingResponse();
-					twiml.message(`There was an error setting up your account. Please go to ${process.env.siteUrl} to finish setup.`);
+					twiml.message(`There was an error setting up your account. Please go to ${process.env.siteUrl}/${data.uuid} to finish setup.`);
 					res.writeHead(200, {'Content-Type': 'text/xml'});
 					res.end(twiml.toString());
 				};
