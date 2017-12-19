@@ -4,6 +4,7 @@ let map;
 let addressList = [];
 let buildingsArray;
 
+
 const createMarkers = () => {
   for (index in buildingsArray) {
     console.log(`pin ${index}?`);
@@ -14,6 +15,7 @@ const createMarkers = () => {
         map: map,
         clickable: true,
         title: buildingsArray[index].address,
+        icon: 'assets/images/marker.svg'
       });
       google.maps.event.addListener(marker, 'click', () => {
         $('#search-field').val(marker.title);
@@ -59,6 +61,8 @@ const searchInputAddress = () => {
 
 
 $(document).ready(() => {
+  $('#search-field').focus();
+
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: {lat: 38.897831, lng: -77.036537},
@@ -108,12 +112,13 @@ $(document).ready(() => {
       let geocoder = new google.maps.Geocoder();
       geocoder.geocode({address: inputAddress}, function(res, status) {
         if (inputAddress === res[0].formatted_address) {
-          $('#search-button').css('border-color', 'green').css('color', 'green');
+          //
         } else {
           let newMarker = new google.maps.Marker({
             position: res[0].geometry.location,
             map: map,
             clickable: true,
+            icon: './assets.images.marker.svg'
           });
           map.setCenter(res[0].geometry.location);
           map.zoom = 8
