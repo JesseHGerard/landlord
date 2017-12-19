@@ -21,9 +21,9 @@ td, th {
 }
 
 .noted-issue:nth-child(even) > * {
-	background-color: #67fc49;
+	background-color: #8ef779;
 }
 
 .noted-issue:nth-child(odd) > * {
-	background-color: #55d83a;
+	background-color: #82e070;
 }
