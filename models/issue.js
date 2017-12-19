@@ -25,6 +25,10 @@ module.exports = function(sequelize, DataTypes) {
 		Issue.belongsTo(models.Building, {onDelete: "cascade"});
 	};
 	
+	Issue.hook("beforeBulkCreate", function(instances) {
+		instances.individualHooks = true;
+	});
+	
 	Issue.hook("beforeCreate", function(instance) {
 		if (instance.category) instance.class = instance.categoryClass();
 	});
