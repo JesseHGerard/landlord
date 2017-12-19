@@ -1,39 +1,47 @@
 <main role="main" class="container" id="container" style="margin-bottom: 40px;">
-	<div class="row">
-    <div class="col">
-		
-			<div class="row-fluid">
-				<h1>Welcome, {{user.name}}</h1>
-				<hr>
-				
-				<h3>File an Issue</h3>
-				<div class="form-group">
-					<label for="category">Category</label><br>
-					<select class="custom-select form-control" id="category" style="width: 100%;">
-						<option></option>
-						<option>Roaches</option>
-						<option>Bed Bugs</option>
-						<option>Mice</option>
-						<option>Leak</option>
-						<option>Light Bulb</option>
-						<option>Stolen Mail</option>
-						<option>Noise</option>
-					</select>
+	<h1>Welcome, {{user.name}}</h1>
+	<ul class="nav nav-tabs" id="dash-tabs" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" id="issues-tab" data-toggle="tab" href="#issues" role="tab" aria-controls="issues" aria-selected="true">Issues</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="graph-tab" data-toggle="tab" href="#graphs" role="tab" aria-controls="analytics" aria-selected="false">Analytics</a>
+		</li>
+	</ul>
+	<br>
+	
+	<div class="tab-content" id="dash-tab-content">
+		<div class="tab-pane fade show active" id="issues" role="tabpanel" aria-labelledby="issues-tab">
+			<div class="row">
+				<div class="col">
+					<h3>File an Issue</h3>
+					<div class="form-group">
+						<label for="category">Category</label><br>
+						<select class="custom-select form-control" id="category" style="width: 100%;">
+							<option></option>
+							<option>Roaches</option>
+							<option>Bed Bugs</option>
+							<option>Mice</option>
+							<option>Leak</option>
+							<option>Light Bulb</option>
+							<option>Stolen Mail</option>
+							<option>Noise</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="description">Description</label>
+						<textarea class="form-control" id="description" rows="3" style="resize: none;"></textarea>
+					</div>
+					<div class="form-group">
+						<label for="quantity">Quantity</label>
+						<input type="number" class="form-control" id="quantity" min=1 value=1></input>
+					</div>
+					<button type="submit" class="btn btn-primary" id="create-issue">Submit</button>
+					<input type="hidden" id="tenantId" value="{{user.uuid}}">
+					<input type="hidden" id="buildingId" value="{{user.BuildingId}}">
+					<hr>
 				</div>
-				<div class="form-group">
-					<label for="description">Description</label>
-					<textarea class="form-control" id="description" rows="3" style="resize: none;"></textarea>
-				</div>
-				<div class="form-group">
-					<label for="quantity">Quantity</label>
-					<input type="number" class="form-control" id="quantity" min=1 value=1></input>
-				</div>
-				<button type="submit" class="btn btn-primary" id="create-issue">Submit</button>
-				<input type="hidden" id="tenantId" value="{{user.uuid}}">
-				<input type="hidden" id="buildingId" value="{{user.BuildingId}}">
-				<hr>
 			</div>
-			
 			<div class="row" id="issue-row">
 				<div class="col-3">
 					<h3>Filter Issues</h3>
@@ -52,7 +60,6 @@
 						<div class="form-group" id="filter-options"></div>
 					</div>
 				</div>
-			
 				<div class="col">
 					<h3>Issues <span id="num-issues"></span></h3>
 					<table class="table-bordered table-striped issues">
@@ -79,11 +86,21 @@
 					</table>
 				</div>
 			</div>
-    </div>
-  </div>
+		</div>
+		<div class="tab-pane fade" id="graphs" role="tabpanel" aria-labelledby="graph-tab">
+			
+			<!-- Graph stuff goes here -->
+			
+		</div>
+	</div>
 </main>
 
 <script>
+	$('#dash-tabs a').on('click', function (e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
+
 	$("#create-issue").on('click', (event) => {
 		var cat = $("#category").val();
 		var desc = $("#description").val();

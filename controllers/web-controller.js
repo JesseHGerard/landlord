@@ -175,8 +175,8 @@ module.exports = function(app) {
   app.get("/dashboard", isAuthenticated, (req, res) => {
     // chartjs
 
-    // var id = req.user.BuildingId;
-    var id = '4';
+    var id = req.user.BuildingId;
+    // var id = '4';
     var information = {
       labels : [],
       data : [],
