@@ -8,6 +8,8 @@ html {
 }
 body {
   background: linear-gradient(70deg, #59B9D6, #99F0F5);
+  height: 100%;
+  width: 100%;
 }
 .container {
   max-width: 80rem;
