@@ -144,7 +144,7 @@ module.exports = function(app) {
 					// respond with issue summary
 					db.Issue.sum('quantity', {where: {description: issue}}).then(sum => {
 						let issueCondition;
-						if (catagory === 'message') {
+						if (category === 'message') {
 							issueCondition = 'message';
 						} else {
 							issueContition = issue;
