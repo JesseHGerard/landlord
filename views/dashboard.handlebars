@@ -195,6 +195,7 @@
 
 	$("#filter-select").on('change', event => {
 		$.get("/api/building").then(building => {
+			var filterControlHTML = "";
 			switch ($("#filter-select").val()) {
 			case 'Class':
 				filterControlHTML = "<hr><label for='filter-class'>Class:</label>\n<select id='filter-class' class='custom-select'><option value='null'>(no class)</option><option>Pests</option><option>Infrastructure</option><option>People</option></select>";
