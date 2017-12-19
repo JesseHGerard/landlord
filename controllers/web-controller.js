@@ -20,7 +20,16 @@ module.exports = function(app) {
 			console.log(issues);
 			//res.render("dashboard", {user: req.user, issues: issues});
 		});*/
-		res.render("dashboard", {user: req.user});
+    db.Building.findAll({
+      attributes: ['phone'],
+      where: {
+        Id: req.user.BuildingId
+      }
+    }).then(data => {
+      // console.log(data[0].phone);
+      phonenumber = data[0].phone
+  		res.render("dashboard", {user: req.user, phonenumber:phonenumber});
+    });
 	} else res.render("index");
   });
 
@@ -281,11 +290,11 @@ module.exports = function(app) {
 	res.json(req.user);
 
   });
-  
+
   app.get("/signup/landlord/form/", (req, res) => {
     res.render("landlordsignup");
   })
-  
+
   app.get("/signup/landlord/form/:address", (req, res) => {
 	var obj = {};
 	if (req.params.address) obj.address = req.params.address;
