@@ -1,9 +1,9 @@
 $(document).ready(function() {
-
+  //
   $("#registerLandLord").on("click", function(event) {
     event.preventDefault();
 
-    window.location.replace("/signup/landlord");
+    window.location.replace("/signup/landlord/form");
 
   });
 

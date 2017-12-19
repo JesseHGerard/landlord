@@ -266,7 +266,7 @@ module.exports = function(app) {
 
   });
 
-  app.get("/signup/landlord", (req,res) => {
+  app.get("/signup/landlord/form", (req,res) => {
     res.render("landlordsignup")
   })
 
