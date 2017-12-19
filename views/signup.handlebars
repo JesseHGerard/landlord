@@ -5,21 +5,21 @@
     <div id="addressHolder" data-id="{{address}}"></div>
 
     <p class="lead text-light">Let's get you started</p>
-    <br>
-    <h2>You are currently registering for: {{address}}</h2>
-    <br>
+
+    <!-- <br> -->
     {{#if condition }}
 
     <!-- condition was met -->
+    <hr>
 
-    <div class="jumbotron bg-success">
-      <h2>You're almost ready!</h2>
+      <h2>You are currently registering for: </h2>
+      <h3>{{address}}</h3>
       <hr class="my-4">
-      <p>Make sure this is the right building</p>
-      <p>{{address}}</p>
+      <!-- <h3>*Make sure this is the right building!</h3> -->
       <p class="lead">
       </p>
-    </div>
+<!--
+    <hr> -->
 
     <h2>Register Tenant Form</h2>
     <br>
@@ -62,11 +62,11 @@
 
     {{else}}
 
-    <div class="jumbotron bg-warning">
+    <hr>
       <h2>Register your building here!</h2>
       <hr class="my-4">
-      <p>Doublecheck that this is the right building</p>
-      <p>{{address}}</p>
+
+      <h2>{{address}}</h2>
       <form>
         <div class="form-group">
           <label for="landLordPhone">Landlord's phone number</label>
@@ -77,10 +77,12 @@
           <input class="form-control formValid" id="landLordEmail" aria-describedby="NameHelp" placeholder="Enter Landlord's Email">
         </div>
       </form>
-    </div>
+    <hr>
+    <br>
 
     <h2>Register Tenant Form</h2>
-    <br>
+
+<br>
 
   <div class="row">
     <form>
