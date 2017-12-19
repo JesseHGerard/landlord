@@ -131,38 +131,6 @@ module.exports = function(app) {
     res.render("building");
   })
 
-  app.get("/tenant/dash/", isAuthenticated, function(req,res) {
-    var id = 1;
-    var information = {
-      labels : [],
-      data : []
-    };
-
-    db.Issue.findAll({
-      where: {
-        BuildingId: id
-      },
-    }).then(data => {
-      // var information = {information:data};
-      if (data.length > 0) console.log(data[0].description);
-      if (data.length > 0) console.log(data[0].createdAt);
-
-      for (var i = 0; i < data.length; i++) {
-        var date = data[i].createdAt.toString().substring(4,9);
-        var time = data[i].createdAt.toString().substring(16,21);
-        var description = data[i].description+" "+date+" : "+time;
-        var quantity = data[i].quantity;
-        information.labels.push(description);
-        information.data.push(quantity);
-        console.log(information.labels[i]);
-        console.log(information.data[i]);
-      }
-
-      res.render("tenant-dash", {quantity:information.data, information:information.labels, object:data});
-      // res.render("tenant-dash", information);
-    });
-  });
-
   app.get("/signin", (req, res) => {
 	if (req.user) {
       res.redirect("/");
@@ -173,60 +141,125 @@ module.exports = function(app) {
 
 
   app.get("/dashboard", isAuthenticated, (req, res) => {
-    // chartjs
 
     var id = req.user.BuildingId;
-    // var id = '4';
-    var information = {
-      labels : [],
-      data : [],
-      donutLabels : [],
-      donutData: []
-    };
+
+    function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+    }
 
     db.Issue.findAll({
       where: {
         BuildingId: id
       },
     }).then(data => {
-      // var information = {information:data};
-      if (data.length > 0) console.log(data[0].category);
-      if (data.length > 0) console.log(data[0].createdAt);
+
       console.log(data);
 
+      // var labels = [];
+      var categories = [];
+      // var datasets = [];
+
+      var objectData = {
+        labels : [],
+        datasets : [],
+        // uniqueCategories: [],
+        donutData : []
+        // datasets2 : []
+      };
+
+      function MakeDataset(category, dataArray) {
+        this.label = category,
+        // this.backgroundColor = getRandomColor(),
+        this.borderColor = getRandomColor(),
+        this.data = dataArray
+      }
+
+      function MakeDatasetDonut(uniqueCategories, donutData, colorArray) {
+        this.labels = uniqueCategories,
+        this.datasets = [{
+          label: 'Breakdown of Issues',
+          data: donutData,
+          backgroundColor: colorArray,
+          borderColor: colorArray,
+          borderWidth: 1
+        }]
+      }
+
+      function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+      function createLabels(data) {
         for (var i = 0; i < data.length; i++) {
-          var date = data[i].createdAt.toString().substring(4,9);
-          var time = data[i].createdAt.toString().substring(16,21);
-          var category = data[i].category+" "+date+" : "+time;
-          var quantity = data[i].quantity;
+          var date = data[i].createdAt;
+          var category = data[i].category;
+          objectData.labels.push(date);
+          categories.push(category);
+        }
+        console.log(categories);
+        var uniqueList = categories.filter(onlyUnique);
+        // objectData.uniqueCategories = uniqueList;
+        createData(uniqueList,data);
+      }
+
+      function createData(uniqueList, data) {
+
+        const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+        var donutData = [];
+        var colorArray = [];
+
+        for (var i = 0; i < uniqueList.length; i++) {
+          var category = uniqueList[i]
+
+          var dataArray = [];
 
 
-          information.labels.push(category);
-          information.data.push(quantity);
-          console.log(information.labels[i]);
-          console.log(information.data[i]);
+          for (var a = 0; a < data.length; a++) {
+
+            if (category === data[a].category) {
+              dataArray.push(data[a].quantity)
+            }
+            else {
+              dataArray.push(0);
+            }
+          }
+
+          console.log(dataArray);
+          var total = dataArray.reduce(reducer);
+          // objectData.donutData.push(total);
+          donutData.push(total);
+          var dataset = new MakeDataset(category, dataArray);
+          objectData.datasets.push(dataset);
+          // var color = getRandomColor();
+          // console.log("pushed" + color);
+          colorArray.push(dataset.borderColor);
+
         }
 
-        // for (var a = 0; a < data.length; a++) {
-        //
-        //   var cat = data[a].category;
-        //
-        //   for (var b = 0; b < data.length; b++) {
-        //     if  (cat === data[b].category) {
-        //       information.donutLabels.push(data[b].category);
-        //       information.donutData.push(data[b].quantity)
-        //     }
-        //   }
-        // }
+        // console.log(RGBarray);
+
+        var donutset = new MakeDatasetDonut(uniqueList, donutData, colorArray);
+        objectData.donutData.push(donutset);
+        // var donutset = new MakeDataset(uniqueList, objectData.donutData);
+        // objectData.datasets2.push(donutset)
+
+        res.json(objectData);
+      }
+
+      createLabels(data);
 
 
 
-
-      res.render("tenant-dash", {quantity:information.data, information:information.labels, object:data});
+      // res.render("tenant-dash", {quantity:information.data, information:information.labels, object:data});
     })
-	// res.json(req.user);
-  // console.log(req.user.BuildingId);
-    });
+  });
 
   app.get("/userData", isAuthenticated, (req, res) => {
 	res.json(req.user);

@@ -9,7 +9,7 @@
 		</li>
 	</ul>
 	<br>
-	
+
 	<div class="tab-content" id="dash-tab-content">
 		<div class="tab-pane fade show active" id="issues" role="tabpanel" aria-labelledby="issues-tab">
 			<div class="row">
@@ -88,13 +88,49 @@
 			</div>
 		</div>
 		<div class="tab-pane fade" id="graphs" role="tabpanel" aria-labelledby="graph-tab">
-			
+
+
 			<!-- Graph stuff goes here -->
-			
+
+			<div class="row">
+				<div class="col-md-8">
+					<h2>Occurance Chart</h2>
+					<br>
+					<canvas id="myChart"></canvas>
+				</div>
+				<div class="col-md-4">
+					<h2>Problem Breakdown</h2>
+					<br>
+					<canvas id="donutChart"></canvas>
+				</div>
+
+				<hr>
+
+
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<tbody id="issue-table-body">
+						<!--{{#each issues}}
+							<tr>
+								<td>{{#if this.class}} {{this.class}} {{/if}}</td>
+								<td>{{#if this.category}} {{this.category}} {{/if}}</td>
+								<td>{{#if this.description}} {{this.description}} {{/if}}</td>
+								<td>{{this.quantity}}</td>
+								<td>{{#ifCond this.Tenant "&&" this.Tenant.apt}} {{this.Tenant.apt}} {{/ifCond}}</td>
+								<td>{{#date}} {{this.createdAt}} {{/date}}</td>
+							</tr>
+						{{/each}}-->
+					<tbody>
+
+				</div>
+
+			</div>
+
 		</div>
 	</div>
 </main>
-
+<script src="assets/js/chart.js" type="text/javascript"></script>
 <script>
 	$('#dash-tabs a').on('click', function (e) {
 		e.preventDefault();
@@ -105,7 +141,7 @@
 		var cat = $("#category").val();
 		var desc = $("#description").val();
 		var quant = parseInt($("#quantity").val());
-		
+
 		var issue = {
 			TenantUuid: $("#tenantId").val(),
 			BuildingId: parseInt($("#buildingId").val()),
@@ -113,14 +149,14 @@
 		if (cat && cat.length > 0) issue.category = cat;
 		if (desc && desc.trim().length > 0) issue.description = desc.trim();
 		if (quant > 0) issue.quantity = quant; else issue.quantity = 1;
-		
+
 		if (issue.description || issue.category) {
 			$.post("/api/issue", issue).then(res => {
 				location.reload();
 			});
 		}
 	});
-	
+
 	$("#filter-button").on('click', event => {
 		switch ($("#filter-select").val()) {
 		case 'Class':
@@ -145,7 +181,7 @@
 			});
 		}
 	});
-	
+
 	$("#filter-select").on('change', event => {
 		$.get("/api/building").then(building => {
 			switch ($("#filter-select").val()) {
@@ -171,15 +207,15 @@
 			$("#filter-options").html(filterControlHTML);
 		});
 	});
-	
+
 	$.get("/api/issues").then(issues => {
 		fillIssueTable(issues);
 	});
-	
+
 	function fillIssueTable(issues) {
 		$("#issue-table-body").empty();
 		$("#num-issues").empty().text("(" + issues.length + ")");
-	
+
 		for (var i = 0; i < issues.length; i++) {
 			$("#issue-table-body").append($("<tr>")
 				.append($("<td>").text(issues[i].class || ""))
@@ -191,6 +227,5 @@
 			);
 		}
 	}
-	
+
 </script>
-	
