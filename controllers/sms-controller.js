@@ -132,16 +132,15 @@ module.exports = function(app) {
 					category = 'message';
 					issueClass = 'message';
 				};
-				console.log({
+				console.log(`{
 					{
-						description: req.body.Body.trim().split(' '),
-						quantity: qty,
-						category: category,
-						class: issueClass,
-						TenantUuid: data.uuid,
-						BuildingId: data.BuildingId
-					}
-				});
+						description: ${req.body.Body.trim().split(' ')},
+						quantity: ${qty},
+						category: ${category},
+						class: ${issueClass},
+						TenantUuid: ${data.uuid},
+						BuildingId: ${data.BuildingId}
+				}`);
 				db.Issue.create({
 					description: req.body.Body.trim().split(' '),
 					quantity: qty,
