@@ -8,6 +8,8 @@ html {
 }
 body {
   background: linear-gradient(70deg, #59B9D6, #99F0F5);
+  height: 100%;
+  width: 100%;
 }
 .container {
   max-width: 80rem;
@@ -94,9 +96,10 @@ body {
 #roach {
   display: inline-block;
   transform: translateY(-4rem);
-  margin-bottom: -5rem;
+
 }
 #title {
-  display: flex;
-
+  overflow: hidden;
+  max-height: 8.5rem;
+  margin-bottom: 2rem;
 }

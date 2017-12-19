@@ -12,7 +12,6 @@ const client = require('twilio')(process.env.twilioSid, process.env.twiloAuthTok
 const newUserSetUp = {};
 
 module.exports = function(app) {
-
 	app.get('/newBuildingPhone/:state/:city', (req, res) => {
 		console.log(req.params.city);
 		db.AreaCode.findOne({
@@ -115,36 +114,41 @@ module.exports = function(app) {
 
 			else if (data !== null && newUserSetUp[userFrom] === undefined) {
 				// process issue
-				let messageArray = req.body.Body.trim().split(' '), qty, issue, category;
-				console.log(messageArray);
+				let description = req.body.Body.trim();
+				let messageArray = description.split(' '), qty, category, issueClass;
+
 				for (item of messageArray) {
 					let search = issues.search(item);
+					console.log(`search: ${JSON.stringify(search)}`);
 					if (search) {
-						issue = search.issue;
 						category = search.category;
+						issueClass = search.class;
 					} else if (parseInt(item)) {
 						qty = parseInt(item);
 					};
 				};
 				// add issue to db
 				if (!qty) qty = 1;
-				if (!issue) {
-					issue = req.body.Body;
+				if (!category) {
 					category = 'message';
+					issueClass = 'message';
 				};
+
 				db.Issue.create({
-					description: issue,
+					description: description,
 					quantity: qty,
 					category: category,
+					class: issueClass,
 					TenantUuid: data.uuid,
 					BuildingId: data.BuildingId
 				}).then(issueRes => {
-					db.Issue.sum('quantity', {where: {description: issue}}).then(sum => {
+					// respond with issue summary
+					db.Issue.sum('quantity', {where: {category: category}}).then(sum => {
 						let issueCondition;
-						if (catagory === 'message') {
-							issueCondition = 'message';
+						if (category === 'message') {
+							issueCondition = 'messages';
 						} else {
-							issueContition = issue;
+							issueCondition = category;
 						};
 
 						const twiml = new MessagingResponse();
