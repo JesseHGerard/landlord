@@ -116,9 +116,10 @@ module.exports = function(app) {
 				// process issue
 				let description = req.body.Body.trim();
 				let messageArray = description.split(' '), qty, category, issueClass;
-				console.log(messageArray);
+
 				for (item of messageArray) {
 					let search = issues.search(item);
+					console.log(`search: ${search}`);
 					if (search) {
 						category = search.category;
 						issueClass = search.class;
@@ -128,8 +129,7 @@ module.exports = function(app) {
 				};
 				// add issue to db
 				if (!qty) qty = 1;
-				if (!issue) {
-
+				if (!category) {
 					category = 'message';
 					issueClass = 'message';
 				};
