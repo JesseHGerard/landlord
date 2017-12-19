@@ -128,6 +128,20 @@ module.exports = function(app) {
       });
   });
 
+  app.get("/phone-signup/:tenantUuid", (req, res) => {
+    db.Tenant.findOne({
+      where: {uuid: req.params.tenantUuid},
+      include: [db.Building]
+    }).then(data => {
+      res.render('phone-signup', {
+        address: data.Building.dataValues.address,
+        phone: data.dataValues.phone,
+        apt: data.dataValues.apt,
+        name: data.dataValues.name
+      });
+    });
+  });
+
   app.get("/building/", function(req, res) {
     res.render("building");
   })
