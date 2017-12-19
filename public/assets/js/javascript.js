@@ -2,8 +2,10 @@ $(document).ready(function() {
   //
   $("#registerLandLord").on("click", function(event) {
     event.preventDefault();
-
-    window.location.replace("/signup/landlord/form");
+	
+	var adrs = $("#search-field").val().trim();
+	
+    window.location.replace("/signup/landlord/form/" + adrs);
 
   });
 

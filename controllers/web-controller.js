@@ -266,9 +266,15 @@ module.exports = function(app) {
 	res.json(req.user);
 
   });
-
-  app.get("/signup/landlord/form", (req,res) => {
-    res.render("landlordsignup")
+  
+  app.get("/signup/landlord/form/", (req, res) => {
+    res.render("landlordsignup");
+  })
+  
+  app.get("/signup/landlord/form/:address", (req, res) => {
+	var obj = {};
+	if (req.params.address) obj.address = req.params.address;
+    res.render("landlordsignup", obj);
   })
 
 };
