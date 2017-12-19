@@ -134,7 +134,7 @@ $(document).ready(function() {
 
     if (blinker === "on") {
       var newUser = {
-        phone: $("#phone").val().trim(),
+        phone: "+1"+$("#phone").val().trim(),
         email: $("#email").val().trim(),
         name: $("#name").val().trim(),
         apt: $("#apt").val().trim(),
@@ -149,10 +149,11 @@ $(document).ready(function() {
         // Send an AJAX POST-request
         $.post("/api/tenant", newUser).done(function(data) {
           if (data && (data === true || data === false)) {
-            alert((data ? "Created a new account" : "Updated your account"));
+            // alert((data ? "Created a new account" : "Updated your account"));
 			window.location.assign("/account-update/" + data);
           } else {
-			console.log(data);
+			// console.log(data);
+      window.location.assign("/account-update/" + data);
 		  }
         });
       }
