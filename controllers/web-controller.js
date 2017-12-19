@@ -9,17 +9,17 @@ module.exports = function(app) {
   app.get("/", function(req, res) {
 	//if (req.user && req.user.userType === 'tenant') return res.redirect("/tenant/dash");
 	//if (req.user && req.user.userType === 'landlord') return res.redirect("/landlord/dash");
-	if (req.user && req.user.userType === 'tenant') {
-		db.Issue.findAll({
+	if (req.user && (req.user.userType === 'tenant' || req.user.userType === 'landlord')) {
+		/*db.Issue.findAll({
 			where: {
 				BuildingId: req.user.BuildingId
 			},
 			include: [db.Tenant, db.Building],
 			order: [['createdAt', 'DESC']],
 		}).then(issues => {
-			// console.log(JSON.stringify(issues, null, 2));
 			res.render("dashboard", {user: req.user, issues: issues});
-		});
+		});*/
+		res.render("dashboard", {user: req.user});
 	} else res.render("index");
   });
 
