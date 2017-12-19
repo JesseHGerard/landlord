@@ -119,7 +119,7 @@ module.exports = function(app) {
 
 				for (item of messageArray) {
 					let search = issues.search(item);
-					console.log(`search: ${search}`);
+					console.log(`search: ${JSON.stringify(search)}`);
 					if (search) {
 						category = search.category;
 						issueClass = search.class;
@@ -146,9 +146,9 @@ module.exports = function(app) {
 					db.Issue.sum('quantity', {where: {category: category}}).then(sum => {
 						let issueCondition;
 						if (category === 'message') {
-							issueCondition = 'message';
+							issueCondition = 'messages';
 						} else {
-							issueContition = category;
+							issueCondition = category;
 						};
 
 						const twiml = new MessagingResponse();
