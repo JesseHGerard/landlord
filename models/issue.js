@@ -17,6 +17,11 @@ module.exports = function(sequelize, DataTypes) {
 		class: {
 			type: DataTypes.ENUM('Pests', 'Infrastructure', 'People'),
 			allowNull: true,
+		},
+		noted: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
 		}
 	});
 

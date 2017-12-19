@@ -17,7 +17,8 @@ module.exports = function(app) {
 			include: [db.Tenant, db.Building],
 			order: [['createdAt', 'DESC']],
 		}).then(issues => {
-			res.render("dashboard", {user: req.user, issues: issues});
+			console.log(issues);
+			//res.render("dashboard", {user: req.user, issues: issues});
 		});*/
 		res.render("dashboard", {user: req.user});
 	} else res.render("index");
