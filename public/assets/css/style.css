@@ -19,3 +19,11 @@ td, th {
 	padding: 10px;
 	text-align: center;
 }
+
+.noted-issue:nth-child(even) > * {
+	background-color: #67fc49;
+}
+
+.noted-issue:nth-child(odd) > * {
+	background-color: #55d83a;
+}
