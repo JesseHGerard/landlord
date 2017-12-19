@@ -1,4 +1,9 @@
 <main role="main" class="container" id="container" style="margin-bottom: 40px;">
+	
+	<input type="hidden" id="userId" value="{{user.uuid}}">
+	<input type="hidden" id="buildingId" value="{{user.BuildingId}}">
+	<input type="hidden" id="userType" value="{{user.userType}}">
+
 	<h1>Welcome, {{user.name}}</h1>
 	<ul class="nav nav-tabs" id="dash-tabs" role="tablist">
 		<li class="nav-item">
@@ -12,6 +17,7 @@
 
 	<div class="tab-content" id="dash-tab-content">
 		<div class="tab-pane fade show active" id="issues" role="tabpanel" aria-labelledby="issues-tab">
+			{{#ifCond user.userType "===" "tenant"}}
 			<div class="row">
 				<div class="col">
 					<h3>File an Issue</h3>
@@ -37,11 +43,10 @@
 						<input type="number" class="form-control" id="quantity" min=1 value=1></input>
 					</div>
 					<button type="submit" class="btn btn-primary" id="create-issue">Submit</button>
-					<input type="hidden" id="tenantId" value="{{user.uuid}}">
-					<input type="hidden" id="buildingId" value="{{user.BuildingId}}">
 					<hr>
 				</div>
 			</div>
+			{{/ifCond}}
 			<div class="row" id="issue-row">
 				<div class="col-3">
 					<h3>Filter Issues</h3>
@@ -143,7 +148,7 @@
 		var quant = parseInt($("#quantity").val());
 
 		var issue = {
-			TenantUuid: $("#tenantId").val(),
+			TenantUuid: $("#userId").val(),
 			BuildingId: parseInt($("#buildingId").val()),
 		};
 		if (cat && cat.length > 0) issue.category = cat;

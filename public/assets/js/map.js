@@ -109,6 +109,14 @@ $(document).ready(() => {
     let inputAddress = $('#search-field').val();
 
     if ($('#search-button').text() === 'add new building') {
+
+      function getboth(){
+      $.ajax({
+        method: 'GET',
+        url: `/signup-b/${$('#search-field').val()}`
+      }).then(res => window.location.replace(`/signup-b/${$('#search-field').val()}`));
+      }
+
       let geocoder = new google.maps.Geocoder();
       geocoder.geocode({address: inputAddress}, function(res, status) {
         if (inputAddress === res[0].formatted_address) {
@@ -123,6 +131,7 @@ $(document).ready(() => {
           map.setCenter(res[0].geometry.location);
           map.zoom = 8
           $('#search-field').val(res[0].formatted_address);
+          getboth();
         };
       });
 
