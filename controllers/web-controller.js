@@ -20,7 +20,16 @@ module.exports = function(app) {
 			console.log(issues);
 			//res.render("dashboard", {user: req.user, issues: issues});
 		});*/
-		res.render("dashboard", {user: req.user});
+    db.Building.findAll({
+      attributes: ['phone'],
+      where: {
+        Id: req.user.BuildingId
+      }
+    }).then(data => {
+      // console.log(data[0].phone);
+      phonenumber = data[0].phone
+  		res.render("dashboard", {user: req.user, phonenumber:phonenumber});
+    });
 	} else res.render("index");
   });
 
@@ -281,15 +290,29 @@ module.exports = function(app) {
 	res.json(req.user);
 
   });
-  
+
   app.get("/signup/landlord/form/", (req, res) => {
     res.render("landlordsignup");
   })
-  
+
   app.get("/signup/landlord/form/:address", (req, res) => {
 	var obj = {};
 	if (req.params.address) obj.address = req.params.address;
     res.render("landlordsignup", obj);
   })
+  
+  // too specific for api-controller
+  app.post("/api/issue/mark-noted/:id", (req, res) => {
+    if (req.params.id) {
+	  db.Issue.update({noted: true}, {where: {id: req.params.id}}).then(() => {
+		res.status(200).end();
+	  }).catch(() => {
+	    req.status(404).end();
+	  });
+	
+    } else {
+	  req.status(404).end();
+    }
+  });
 
 };
