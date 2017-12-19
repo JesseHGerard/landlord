@@ -77,6 +77,7 @@
 							<th>Quantity</th>
 							<th>Apartment</th>
 							<th>Time</th>
+							{{#ifCond user.userType "===" "landlord"}} <th></th> {{/ifCond}}
 						</thead>
 						<tbody id="issue-table-body">
 							<!--{{#each issues}}
@@ -137,8 +138,11 @@
 		</div>
 	</div>
 </main>
+<script src="https://use.fontawesome.com/a50ca22383.js"></script>
 <script src="assets/js/chart.js" type="text/javascript"></script>
 <script>
+	const isLandlord = $("#userType").val() === 'landlord';
+
 	$('#dash-tabs a').on('click', function (e) {
 		e.preventDefault();
 		$(this).tab('show');
@@ -214,6 +218,16 @@
 			$("#filter-options").html(filterControlHTML);
 		});
 	});
+	
+	$(document).on('click', '.issue-marker', function(event) {
+		var $this = $(this);
+		//console.log(parseInt($this.attr('data-issueId')));
+		$.post("/api/issue/mark-noted/" + $this.attr('data-issueId')).then(res => {
+			location.reload();
+		}).fail(err => {
+		  console.log(err);
+	  });
+	});
 
 	$.get("/api/issues").then(issues => {
 		fillIssueTable(issues);
@@ -224,14 +238,21 @@
 		$("#num-issues").empty().text("(" + issues.length + ")");
 
 		for (var i = 0; i < issues.length; i++) {
-			$("#issue-table-body").append($("<tr>")
+			var row = $("<tr>")
 				.append($("<td>").text(issues[i].class || ""))
 				.append($("<td>").text(issues[i].category || ""))
 				.append($("<td>").text(issues[i].description || ""))
 				.append($("<td>").text(issues[i].quantity))
 				.append($("<td>").text((issues[i].Tenant && issues[i].Tenant.apt) ? issues[i].Tenant.apt : ""))
 				.append($("<td>").text(moment(new Date(issues[i].createdAt).toISOString()).format("M/D/YYYY h:mm a")))
-			);
+			;
+			if (isLandlord) {
+				row.append($("<td>").html("<button class='btn btn-secondary issue-marker' data-issueId=" + issues[i].id + " " + (issues[i].noted ? "disabled" : "") + "><i class='fa fa-check' aria-hidden='true'></i></button>"));
+			}
+			if (issues[i].noted) {
+				row.addClass("noted-issue")
+			};
+			$("#issue-table-body").append(row);
 		}
 	}
 

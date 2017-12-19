@@ -300,5 +300,19 @@ module.exports = function(app) {
 	if (req.params.address) obj.address = req.params.address;
     res.render("landlordsignup", obj);
   })
+  
+  // too specific for api-controller
+  app.post("/api/issue/mark-noted/:id", (req, res) => {
+    if (req.params.id) {
+	  db.Issue.update({noted: true}, {where: {id: req.params.id}}).then(() => {
+		res.status(200).end();
+	  }).catch(() => {
+	    req.status(404).end();
+	  });
+	
+    } else {
+	  req.status(404).end();
+    }
+  });
 
 };
