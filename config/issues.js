@@ -4,16 +4,16 @@
 
 const issues = {
   'Pests': {
-    roaches: ['roach', 'roaches', 'cockroach', 'cockroaches', 'roch', 'roches', 'roads', 'road'],
-    mice: ['mouse', 'mice', 'mose', 'mous', 'mic']
+    Roaches: ['roach', 'roaches', 'cockroach', 'cockroaches', 'roch', 'roches', 'roads', 'road'],
+    Mice: ['mouse', 'mice', 'mose', 'mous', 'mic']
   },
   'Infrastructure': {
-    leaks: ['leak', 'leaks', 'leek', 'leeks', 'lek', 'leks', 'lake', 'lakes', 'leaking', 'leaky'],
-    bulbs: ['bulb burned-out', 'bulbs burned-out', 'bulb', 'blubs', 'bolb', 'bolbs', 'light', 'light-bulb', 'lights']
+    Leak: ['leak', 'leaks', 'leek', 'leeks', 'lek', 'leks', 'lake', 'lakes', 'leaking', 'leaky'],
+    'Light Bulb': ['bulb burned-out', 'bulbs burned-out', 'bulb', 'blubs', 'bolb', 'bolbs', 'light', 'light-bulb', 'lights']
   },
   'People': {
-    packages: ['stolen package', 'stolen packages','package', 'packages', 'stolen', 'stole', 'stoal', 'stolen-package', 'pack', 'delivery', 'deliveries', 'mail', 'male'],
-    noise: ['noise complaint', 'noise complaints', 'noise', 'noises', 'noise-complaint', 'nose', 'loud']
+    'Stolen Mail': ['stolen package', 'stolen packages','package', 'packages', 'stolen', 'stole', 'stoal', 'stolen-package', 'pack', 'delivery', 'deliveries', 'mail', 'male'],
+    Noise: ['noise complaint', 'noise complaints', 'noise', 'noises', 'noise-complaint', 'nose', 'loud']
   },
   search(word) {
     let result;
