@@ -80,7 +80,7 @@ $(document).ready(() => {
     googleGeolocation()
   });
 
-  // get building list
+  // get building list from db
   $.ajax({
     method: 'GET',
     url: '/autocomplete'

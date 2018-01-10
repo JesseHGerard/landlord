@@ -14,10 +14,6 @@ $(document).ready(function() {
 
     var newIssue = $("#makeIssue").val().trim();
 
-    // $.post("/api/issue", newIssue).done(function(data) {
-    //   window.location.reload();
-    // })
-
   });
 
   $("#registerTenant").on("click", function(event) {
@@ -36,7 +32,6 @@ $(document).ready(function() {
     event.preventDefault();
 
     var buildingAddress = $("#registerLocation").data("id");
-    // console.log(buildingId);
 
     $.get("/api/register/building/" + buildingAddress).done(function(data) {
       window.location.assign("/signup-b/" + data.address);
