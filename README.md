@@ -24,6 +24,8 @@ Bootstrap <br>
 Javascript ES6 <br>
 
 #### about this project
+Most of us have had landlord landlord that could be more responsive to issues in the building. SerfBoard is a tool to help tenants and landlords be more informed about these issues. SMS via Twilio was chosen because of it's ubiquity and accessibility. <br><br>
+Send short, quick, messages like "I saw a roach", or "1 mouse". Those messages are aggregated into a dashboard for the building's landlord to review. This enables tenants to communicate more often, and see if their issues are wide spread, or limited to their apartment.
 
 ### code
 Two interesting parts of this project are the interactive [map](#map) on the front end, and the [SMS controller](#sms-controller) on the back end.
